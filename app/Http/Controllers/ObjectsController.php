@@ -16,15 +16,15 @@ class ObjectsController extends Controller
         $this->objects_repository = $objects;
     }
 
-	/**
+    /**
      * get all objects
-	 */
-	public function getObjects(Request $request)
-	{
-		$places = $this->objects_repository->getAllObjects();
+     */
+    public function getObjects(Request $request)
+    {
+        $places = $this->objects_repository->getAllObjects();
         return response()->json($places); 
-	}
-
+    }
+    
     /**
      * get object data by id
      * @param  mixed  $id_place
