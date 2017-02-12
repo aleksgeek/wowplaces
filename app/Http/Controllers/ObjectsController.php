@@ -18,6 +18,9 @@ class ObjectsController extends Controller
 
     /**
      * get all objects
+     *
+     * @param Illuminate\Http\Request $request
+     * @return string
      */
     public function getObjects(Request $request)
     {
@@ -27,7 +30,9 @@ class ObjectsController extends Controller
     
     /**
      * get object data by id
+     *
      * @param  mixed  $id_place
+     * @return string
      */
     public function getObjectById($id_place)
     {

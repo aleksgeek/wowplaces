@@ -16,6 +16,12 @@ class MailController extends Controller
         $this->mailer = $mail;
     }
 
+    /**
+     * send mail with text to autor from post params
+     *
+     * @param Illuminate\Http\Request $request
+     * @return string
+     */
     public function sendMail(Request $request)
     {
         $mail_txt  = $request->input('mail_txt');  

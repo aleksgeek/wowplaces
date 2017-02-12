@@ -29,6 +29,9 @@ class AuthController extends Controller
 
     /**
      * create access token with user data
+     *
+     * @param App\Http\Requests\AuthAuthenticate $request
+     * @return string
      */
     public function authenticate(AuthAuthenticate $request)
     {     
@@ -39,6 +42,9 @@ class AuthController extends Controller
 
     /**
      * save user data to DB and make url for authorization approve
+     *
+     * @param App\Http\Requests\AuthRegister $request
+     * @return string
      */
     public function register(AuthRegister $request)
     {
@@ -51,6 +57,7 @@ class AuthController extends Controller
      * approve user authorization by hash param from email
      *
      * @param string $approve_param
+     * @return string
      */
     public function registerApprove($approve_param)
     {
