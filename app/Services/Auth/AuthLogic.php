@@ -17,4 +17,9 @@ interface AuthLogic
      * get user credentails by hash param  
      */
 	public function getApproveRegisterCredentials($approve_param);
+
+	/**
+	 * get user from Authorization header
+	 */
+	public function getAuthenticatedUser();
 }

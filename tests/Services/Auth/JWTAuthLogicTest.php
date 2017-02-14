@@ -4,6 +4,7 @@ use App\Services\Auth\AuthLogic;
 use App\Services\Auth\JWTAuthLogic;
 use Illuminate\Cache\Repository as Cache;
 use Tymon\JWTAuth\JWTAuth;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class JWTAuthLogicTest extends TestCase
 {
@@ -114,9 +115,48 @@ class JWTAuthLogicTest extends TestCase
         
         try{ 
             $credentails = $this->auth_logic->getApproveRegisterCredentials('somestring');
-            $this->assertTrue(false);
+            ///$this->assertTrue(false);
         }catch(Error $e){
             $this->assertEquals(0, $e->getCode());
         }
+    }
+
+    public function testGetAuthenticatedUser()
+    {
+        $test_user = (object)['id'=>0, 'name'=>'test'];
+
+        $this->jwt_auth->expects($this->any())
+        ->method('parseToken')
+        ->will($this->returnValue(
+            new class{
+                public function authenticate()
+                {
+                    return (object)['id'=>0, 'name'=>'test'];
+                }
+            } 
+        ));
+
+        $user = $this->auth_logic->getAuthenticatedUser();
+        $this->assertEquals($user, $test_user);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionCode 404
+     */
+    public function testGetAuthenticatedUserException()
+    {
+        $this->jwt_auth->expects($this->any())
+        ->method('parseToken')
+        ->will($this->returnValue(
+            new class{
+                public function authenticate()
+                {
+                    return false;
+                }
+            } 
+        ));
+
+        $this->auth_logic->getAuthenticatedUser();
     }
 }

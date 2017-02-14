@@ -27,6 +27,8 @@ class JWTAuthLogic implements AuthLogic
     /**
      * Creating jwt token by user credentials. This token contains user data ($custom_claims)
      *
+     * @param  array $credentials
+     * @param  array $custom_claims
      * @return string
      * @throws AuthorizationException
      */
@@ -44,6 +46,7 @@ class JWTAuthLogic implements AuthLogic
     /**
      * create md5 param for approve registering and store it to cache
      *
+     * @param  array $credentials
      * @return string
      */ 
     public function createApproveRegisterParam(array $credentials)
@@ -59,7 +62,7 @@ class JWTAuthLogic implements AuthLogic
     /**
      * get user credentails from cache (md5 hash)
      *
-     * @param  string 
+     * @param  string $approve_param
      * @return array
      * @throws AuthorizationException
      */ 
@@ -72,5 +75,22 @@ class JWTAuthLogic implements AuthLogic
         }
 
         throw new AuthorizationException("confirm registration error", 401);
+    }
+
+    /**
+     * get user from Authorization header
+     *
+     * @return object
+     * @throws AuthorizationException
+     */
+    public function getAuthenticatedUser()
+    {
+        $user = $this->jwt_auth->parseToken()->authenticate(); 
+
+        if ($user) {
+            return $user;
+        }    
+
+        throw new AuthorizationException("user not found", 404);
     }
 }
