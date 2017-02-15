@@ -23,6 +23,6 @@ Route::get('/register/approve/{approve_param}', ['uses'=>'AuthController@registe
 Route::post('/mail', ['uses'=>'MailController@sendMail']);
 
 Route::group(['middleware'=>['jwt.auth']], function () { 	
-	Route::post('/vote', ['uses'=>'VoteController@store']);	
+	Route::post('/vote', ['uses'=>'VoteController@makeVoting']);	
 });
 
