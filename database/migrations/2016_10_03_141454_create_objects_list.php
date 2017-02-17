@@ -36,6 +36,6 @@ class CreateObjectsList extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('objects_list');
     }
 }

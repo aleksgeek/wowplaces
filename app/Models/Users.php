@@ -9,22 +9,18 @@ class Users extends Authenticatable
     protected $table = 'users';
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password'
-    ];
-
-    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token'
-    ];
+    protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['password', 'remember_token'];
 
     public function placesList()
     {
