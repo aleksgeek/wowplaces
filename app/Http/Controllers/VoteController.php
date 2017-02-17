@@ -34,8 +34,9 @@ class VoteController extends Controller
 		$rating = $request->input('rating');  
 		$user = $this->auth_logic->getAuthenticatedUser();
 
-		if($this->vote_repository->makeVote($id_object, $rating, $user['id'])){
-			return response()->json('vote was successful'); 	
+		if($this->vote_repository->canVote($id_object, $user['id'])){
+			$this->vote_repository->makeVote($id_object, $rating, $user['id']);
+			return response()->json('vote was successful'); 
 		}	
 
 		return response()->json('vote error', 500);  		
