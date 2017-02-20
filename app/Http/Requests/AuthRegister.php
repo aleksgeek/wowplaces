@@ -35,8 +35,8 @@ class AuthRegister extends FormRequest
      */
     public function messages()
     {
-        $messages['email'] = 'not valid email';
-        $messages['password'] = 'password is required';
+        $messages['email'] = 'not_valid_email';
+        $messages['password'] = 'password_is_required';
         
         return $messages;
     }
