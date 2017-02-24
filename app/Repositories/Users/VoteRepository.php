@@ -56,8 +56,8 @@ class VoteRepository
 		
 		if($existing_user->isEmpty()){
 			return true;
+		}else{
+			return false;
 		}
-
-		throw new RuntimeException("you have already voted", 405);
 	}
 }

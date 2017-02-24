@@ -16,7 +16,7 @@ gulp.task('browserSync', function() {
 gulp.task('build', function(){
 	gulp.src('public-dev/fonts/*').pipe(gulp.dest('public/fonts'));
 	gulp.src('public-dev/img/*').pipe(gulp.dest('public/img'));
-	gulp.src('public-dev/views/**/*.html').pipe(gulp.dest('public/views'));
+	gulp.src('public-dev/app/**/*.html').pipe(gulp.dest('public/app'));
     
     return gulp.src('public-dev/*.html')
 		.pipe(gulpIf('*.js', uglify()))

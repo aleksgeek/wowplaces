@@ -37,6 +37,8 @@ class VoteController extends Controller
 		if($this->vote_repository->canVote($id_object, $user['id'])){
 			$this->vote_repository->makeVote($id_object, $rating, $user['id']);
 			return response()->json('vote was successful'); 
+		}else{		
+			return response()->json('you have already voted', 400);
 		}	
 
 		return response()->json('vote error', 500);  		

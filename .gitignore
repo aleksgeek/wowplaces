@@ -3,3 +3,4 @@
 /public-dev
 composer.phar
 .env
+gulp-start.bat
