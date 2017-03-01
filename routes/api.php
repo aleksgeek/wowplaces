@@ -10,8 +10,8 @@
 |
 */
 
-Route::get('/objects', ['uses'=>'ObjectsController@getObjects']);
-Route::get('/objects/{id_object}', ['uses'=>'ObjectsController@getObjectById']);
+Route::get('/objects', ['uses'=>'ObjectsController@getObjects', 'as'=>'get-objects']);
+Route::get('/objects/{id_object}', ['uses'=>'ObjectsController@getObjectById', 'as'=>'get-object']);
 
 // auth
 Route::post('/authenticate', 'AuthController@authenticate');
