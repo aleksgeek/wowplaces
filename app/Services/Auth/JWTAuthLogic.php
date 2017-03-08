@@ -30,6 +30,7 @@ class JWTAuthLogic implements AuthLogic
      * @param  array $credentials
      * @param  array $custom_claims
      * @return string
+     *
      * @throws AuthorizationException
      */
     public function getToken(array $credentials, array $custom_claims)
@@ -40,7 +41,7 @@ class JWTAuthLogic implements AuthLogic
             return $token;
         }
 
-        throw new AuthorizationException("invalid credentials", 401);
+        throw new AuthorizationException("cannot create auth jwt token, email - {$credentials['email']}", 401);
     }
 
     /**
@@ -64,6 +65,7 @@ class JWTAuthLogic implements AuthLogic
      *
      * @param  string $approve_param
      * @return array
+     *
      * @throws AuthorizationException
      */ 
     public function getApproveRegisterCredentials($approve_param)
@@ -74,13 +76,14 @@ class JWTAuthLogic implements AuthLogic
             return json_decode($json_credentials, 1);
         }
 
-        throw new AuthorizationException("confirm registration error", 401);
+        throw new AuthorizationException("register approve_param is invalid", 401);
     }
 
     /**
      * get user from Authorization header
      *
      * @return object
+     *
      * @throws AuthorizationException
      */
     public function getAuthenticatedUser()
@@ -91,6 +94,6 @@ class JWTAuthLogic implements AuthLogic
             return $user;
         }    
 
-        throw new AuthorizationException("user not found", 404);
+        throw new AuthorizationException("authenticated user not found", 404);
     }
 }

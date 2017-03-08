@@ -9,22 +9,19 @@ class UserRepository
 	/**
      * create not approved user
      *
+     * @param App\Http\Requests\AuthRegister $request
      * @return object
-     * @throws SaveToDBException
 	 */
 	public function save($request)
 	{
         $user = new Users();
-        $user->name = $request['login_name'];
+        $user->name = $request['name'];
         $user->email    = $request['email'];
         $user->password = bcrypt($request['password']);
-        $user->approve  = 0;
-        
-        if($user->save()){
-        	return $user;	
-        }else{
-        	throw new SaveToDBException("user saving error", 500);	
-        }
+        $user->approve  = '0';
+        $user->save();
+
+        return $user;	           
 	}
 	
 	/**
@@ -35,7 +32,7 @@ class UserRepository
 	 */	
 	public function confirm($credentails)
 	{
-        return Users::where('email', $credentails['email'])->update('approve', 1);
+        return Users::where('email', $credentails['email'])->update(['approve'=>1]);
 	}
 
 	/**

@@ -28,8 +28,6 @@ class VoteRepository
 			ObjectsList::where('id', $id_object)->increment('rating_bad');
 			$rating_good = 0;	
 			$rating_bad  = 1;
-		}else{
-			throw new InvalidArgumentException('argument $rating is not correct', 500);
 		}
 
 		$user = new UsersVotes();

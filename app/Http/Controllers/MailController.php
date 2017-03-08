@@ -34,7 +34,7 @@ class MailController extends Controller
         if($this->mailer->failures()){
             return response()->json('mail send error', 500);       
         }else{
-            return response()->json('mail send'); 
+            return response()->json('mail was sent'); 
         }     
     }
 }

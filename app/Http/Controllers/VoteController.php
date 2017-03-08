@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\Auth\AuthLogic;
 use App\Repositories\Users\VoteRepository;
+use InvalidArgumentException;
 
 class VoteController extends Controller
 {
@@ -24,24 +25,33 @@ class VoteController extends Controller
     }
 
 	/**
-	 * vote up for interesting object
+	 * voting for interesting object
 	 *
 	 * @param Illuminate\Http\Request $request
+	 * @return string
+	 *
+	 * @throws InvalidArgumentException
 	 */
 	public function makeVoting(Request $request)
 	{
-		$id_object = $request->input('id_object');
-		$rating = $request->input('rating');  
-		$user = $this->auth_logic->getAuthenticatedUser();
+		try{
+			$id_object = $request->input('id_object');
+			$rating    = $request->input('rating');  
+			$user      = $this->auth_logic->getAuthenticatedUser();
 
-		if($this->vote_repository->canVote($id_object, $user['id'])){
-			$this->vote_repository->makeVote($id_object, $rating, $user['id']);
-			return response()->json('vote was successful'); 
-		}else{		
-			return response()->json('you have already voted', 400);
-		}	
+			if(!in_array($rating, ['up', 'down'])){
+				throw new InvalidArgumentException('argument $rating is not correct', 400);
+			}
 
-		return response()->json('vote error', 500);  		
+			if($this->vote_repository->canVote($id_object, $user['id'])){
+				$this->vote_repository->makeVote($id_object, $rating, $user['id']);
+				return response()->json('vote was successful'); 
+			}else{		
+				return response()->json('you have already voted', 400);
+			}	
+		}catch(InvalidArgumentException $e){
+			return response()->json('bad enter data', $e->getCode());
+		}
 	}
 
 }

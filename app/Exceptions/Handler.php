@@ -44,17 +44,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        /*
         if($exception->getCode()<200){
             $http_status = 500;
         }else{
             $http_status = $exception->getCode();
         }
-
+        
         if (config('app.debug')) {
             return parent::render($request, $exception);
         }else{
             return response()->json(['error' => $exception->getMessage()], $http_status);    
         }
+        */
+        
+        return parent::render($request, $exception);
     }
 
     /**
