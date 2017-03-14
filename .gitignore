@@ -1,6 +1,5 @@
 /node_modules
 /vendor
-/public-dev
 composer.phar
 .env
 gulp-start.bat
