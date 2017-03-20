@@ -1,5 +1,3 @@
 /node_modules
-/vendor
-composer.phar
 .env
 gulp-start.bat
