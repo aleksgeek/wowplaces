@@ -19,7 +19,7 @@ app.controller('authCtrl', ['authService', function(authService) {
 
     self.logout = function(){
 		authService.logout();
-        self.is_logined = !authService.isLogined(); 
+        self.is_logined = authService.isLogined(); 
         self.toggle_form();
     };
 

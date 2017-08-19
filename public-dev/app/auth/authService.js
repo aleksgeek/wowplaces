@@ -17,6 +17,11 @@ app.service('authService', ['$q', '$http', 'config', function($q, $http, config)
 		sessionStorage.setItem('user_data', data_obj);
 	}
 
+	function removeToken()
+	{
+		return sessionStorage.removeItem('token');
+	}
+
 	function getAuthUser()
 	{
 		return JSON.parse(sessionStorage.getItem('user_data'));
@@ -29,7 +34,7 @@ app.service('authService', ['$q', '$http', 'config', function($q, $http, config)
 
 			$http.post(config.api_url+'/authenticate', {email:email, password:password}).then(
 			function(ok){
-				var token = ok.data.token;
+				var token = ok.data;
 				saveToken(token);
 				saveAuthUser();
 				deferred.resolve(token);
@@ -41,7 +46,7 @@ app.service('authService', ['$q', '$http', 'config', function($q, $http, config)
 			return deferred.promise;
 		},
 		logout: function(){
-			saveToken(null);
+			removeToken();
 		},
 		register_approve: function(tmp_auth)
 		{
