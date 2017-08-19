@@ -40,7 +40,7 @@
 
                 <ul class="nav navbar-nav pull-left hidden-xs">
                     <li><a ui-sref="objects" class="menu-a">карта</a></li>
-                    <li><a href="#" class="menu-a">добавить</a></li>
+                    <li><a ui-sref="object_control" class="menu-a">добавить</a></li>
                 </ul> 
 
                 <ul class="nav pull-right">
@@ -68,7 +68,7 @@
                         <div class="auth_form" ng-if="auth.is_logined && auth.open_form">
                             <form method="post" ng-submit="auth.logout()">
                                 <div>
-                                    мой email: {{auth.user_data.email}}
+                                    {{auth.user_data.email}}
                                 </div>    
                                 <hr>
                                 <button type="submit" class="btn btn-success">выйти</button>
@@ -91,7 +91,7 @@
     </div>
 
     <!-- map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoLIJy5pW5vhf5cfjyFtIrA-8ejy2QvWs&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrN-YAJyiGJH5MQlq5AqRMM1q-Ls_yRxk&libraries=places"></script>
 
     <!--build:app app/app.min.js -->
     <script src="app/app.js"></script> 

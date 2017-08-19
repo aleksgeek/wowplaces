@@ -3,7 +3,7 @@
 var app = angular.module('wowPlaces', ['ui.router']);
 
 app.constant('config', {
-	"api_url":"http://localhost:3100",
+	"api_url":"http://localhost/wowplaces/public-dev/index.php/api",
 	"url":{
 		"login":"index.php/api/authenticate",
 		"get_user":"index.php/api/user",
@@ -17,6 +17,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     	url: "/objects",
      	templateUrl  : "app/map/objects.html",
       	controller   : 'objectsCtrl as objects'
+    }).state('object_control', {
+    	url: "/object_control",
+     	templateUrl  : "app/object_control/object_form.html",
+      	controller   : 'objectControlCtrl as objectControl'
     }).state('register', {
       	url: "/register",
       	templateUrl  : "app/auth/register.html",
