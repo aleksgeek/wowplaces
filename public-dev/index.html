@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-fixed-top" role="navigation" ng-controller="navCtrl as nav" ng-cloak>
+    <nav class="navbar navbar-fixed-top" role="navigation" ng-controller="topMenuCtrl as nav" ng-cloak>
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" ui-sref="objects"> 
@@ -37,11 +37,10 @@
                         </a>
                     </li>
                 </ul>     
-
-                <ul class="nav navbar-nav pull-left hidden-xs">
-                    <li><a ui-sref="objects" class="menu-a">карта</a></li>
-                    <li><a ui-sref="object_control" class="menu-a">добавить</a></li>
-                </ul> 
+		
+				<div class="hidden-xs pull-left">
+					<div ng-include="'app/top_menu/menuValues.html'"></div> 
+                </div>
 
                 <ul class="nav pull-right">
                     <li ng-controller="authCtrl as auth" ng-class="{ 'open': auth.open_form }"> 
@@ -50,7 +49,7 @@
                             <span ng-if="auth.is_logined">{{auth.user_data.name}}</span>
                             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                         </a>                 
-                        <div class="auth_form" ng-if="!auth.is_logined && auth.open_form">
+                        <div class="auth-form" ng-if="!auth.is_logined && auth.open_form">
                             <form method="post" ng-submit="auth.authenticate()">
                                 <div class="form-group">
                                     <label for="email">Ваш email</label>
@@ -65,7 +64,7 @@
                                 <a ui-sref="register" class="btn btn-primary btn-sm" ng-click="auth.toggle_form()">регистрация</a>
                             </form>
                         </div>
-                        <div class="auth_form" ng-if="auth.is_logined && auth.open_form">
+                        <div class="auth-form" ng-if="auth.is_logined && auth.open_form">
                             <form method="post" ng-submit="auth.logout()">
                                 <div>
                                     {{auth.user_data.email}}
@@ -77,11 +76,8 @@
                     </li>
                 </ul>           
             </div> 
-            <div ng-if="nav.is_menu_open" class="mobile-menu visible-xs">
-                <ul class="nav navbar-nav" ng-click="nav.toggle_menu()">
-                    <li><a ui-sref="objects" class="menu-a">карта</a></li>
-                    <li><a href="#" class="menu-a">добавить</a></li>
-                </ul>
+            <div ng-if="nav.is_menu_open" class="mobile-menu visible-xs" ng-click="nav.toggle_menu()">
+				<div ng-include="'app/top_menu/menuValues.html'"></div>
             </div>
         </div>
     </nav>
@@ -95,6 +91,7 @@
 
     <!--build:app app/app.min.js -->
     <script src="app/app.js"></script> 
+    <script src="app/top_menu/topMenuCtrl.js"></script>
     <!-- endbuild -->
 
     <!--build:app app/objects.min.js -->

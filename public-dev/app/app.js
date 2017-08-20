@@ -21,6 +21,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     	url: "/object_control",
      	templateUrl  : "app/object_control/object_form.html",
       	controller   : 'objectControlCtrl as objectControl'
+    }).state('tourist_guide', {
+    	url: "/tourist_guide",
+     	templateUrl  : "app/tourist_guide/countries.html",
+      	controller   : 'touristGuideCtrl as touristGuide'
     }).state('register', {
       	url: "/register",
       	templateUrl  : "app/auth/register.html",
@@ -31,14 +35,4 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         controller   : 'registerApproveCtrl as registerApprove'
     });
     $urlRouterProvider.otherwise('/objects');
-});
-
-app.controller('navCtrl', function($scope) {
-	var self = this;
-
-	self.is_menu_open = false;
-
-	self.toggle_menu = function(){
-		self.is_menu_open = !self.is_menu_open;
-	}
 });

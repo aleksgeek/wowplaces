@@ -33,7 +33,7 @@ nav.navbar a.menu-a:hover, nav.navbar li.open a.menu-a{
     border-right: 1px #000000 solid;
     margin: 0;
 }
-nav.navbar .auth_form{
+nav.navbar .auth-form{
     border-left: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-right: 1px solid #000000;
