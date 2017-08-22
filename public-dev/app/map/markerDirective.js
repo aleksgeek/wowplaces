@@ -42,8 +42,6 @@ app.directive("myMarker", ['objectControlService', '$compile', function(objectCo
     		});
             marker.setMap(mapCtrl.map);
             mapCtrl.addMarker(marker);
-
-            console.log(mapCtrl.markers.length);
             
             scope.$on('$destroy', function(){
                 console.log('destroy');      

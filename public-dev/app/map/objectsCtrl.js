@@ -2,8 +2,8 @@ app.controller('objectsCtrl', ['$scope', 'objectControlService', function($scope
 	var self = this;
  		self.markers = [];
 
-	objectControlService.getAllObjects().then(function(all_objects){
-	    self.markers = all_objects;
+	objectControlService.getAllObjects().then(function(allObjects){
+	    self.markers = allObjects;
 	}).catch(function(error) {
 		console.error(error);    
 	});

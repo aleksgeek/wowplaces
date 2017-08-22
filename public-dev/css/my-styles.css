@@ -64,7 +64,7 @@ nav.navbar .mobile-menu a:hover{
     max-width: 300px;
 }
 .marker-context hr{
-    margin:0;
+	margin: 3px 0 3px 0;
     color:#999999;
     min-width: 150px;
 }
@@ -117,10 +117,12 @@ a, a:hover{
     z-index: 1;
     right: 0px;
 }
+.marker-info{
+	font-size: 16px;
+}
 .marker-info .title{
     text-align: center;
     font-weight: bold;
-    font-size: 16px;
     border-bottom: 1px solid #eee;
 }
 .info-show{
