@@ -6,7 +6,12 @@ app.directive("myMarkerInfo", ['$rootScope', 'objectControlService', function($r
     	scope: true,
         template: `
             <div ng-if="markerInfoOpened" class="marker-info">
-                <div ng-click="$parent.hide()" class="pull-right"><i class="fa fa-arrow-right pointer"></i></div>
+                <div ng-click="$parent.hide()" class="pull-right">
+					<i class="fa fa-arrow-right pointer"></i>
+				</div>
+				<div ng-click="" class="pull-left">
+					<i class="fa fa-edit pointer"></i>
+				</div>
                 <div class="title"> {{$parent.title}} </div>
                 <div> {{$parent.desc}} </div>
             </div> 
