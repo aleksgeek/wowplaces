@@ -7,9 +7,4 @@ app.controller('objectsCtrl', ['$scope', 'objectControlService', function($scope
 	}).catch(function(error) {
 		console.error(error);    
 	});
-
-	self.test = function(){
-    	console.log('main mapCtrl test');
-    };
-
 }]);

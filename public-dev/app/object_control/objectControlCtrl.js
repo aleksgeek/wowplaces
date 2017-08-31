@@ -1,3 +1,3 @@
-app.controller('registerCtrl', ['$scope', function($scope) {
+app.controller('objectControlCtrl', ['$scope', function($scope) {
 	var self = this;
 }]);	

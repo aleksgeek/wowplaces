@@ -68,20 +68,21 @@ nav.navbar .mobile-menu a:hover{
     color:#999999;
     min-width: 150px;
 }
-.marker-context i{
-    cursor:pointer;
-}
 .marker-context .btn-block{
     width:150px;
 }
-.marker-context .fa-thumbs-up{
+.marker .fa-thumbs-up{
     color:green;
 }
-.marker-context .fa-thumbs-down{
+.marker .fa-thumbs-down{
     color:red;
 }
 .marker-context .more-btn{
     color:blue;
+}
+
+.marker-info i{
+    cursor:pointer;
 }
 
 .container-fluid{
@@ -103,7 +104,7 @@ nav.navbar .mobile-menu a:hover{
 }
 
 a, a:hover{
-    color:green;
+    color:#000000;
 }
 
 .marker-info{

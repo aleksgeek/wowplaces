@@ -19,10 +19,6 @@ app.directive("myMap", ['objectControlService', function(objectControlService) {
                 self.showMarkerInfo = function(idObject){
                     $scope.$parent.$broadcast('showMarkerInfo', idObject);    
                 }
-
-    			self.test = function(){
-                    console.log('mapCtrl test');
-    			}
         },
         link: function(scope, element, attrs, mapCtrl)
         {

@@ -8,7 +8,7 @@ app.directive("myMarkerContext", [function() {
             typeInfo: '@'
     	},
         template: `
-            <div class="marker-context">
+            <div class="marker marker-context">
                {{description}}
                 <hr>
                 <div class="btn-block">					
