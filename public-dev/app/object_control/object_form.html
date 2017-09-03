@@ -1,5 +1,44 @@
 <div class="container top-10">
 <div class="row">
-	form
+	<form class="form" method="post" ng-submit="">
+		<div class="col-xs-12 object-control-form">
+			<div class="form-group">
+				<label>Показать на карте:</label>
+				<my-map latitude="40.447" longitude="50.525" zoom="3" width="window.innerWidth-200" height="200">			
+					<my-marker-control></my-marker-control>
+				</my-map>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-sm-offset-3 object-control-form">
+			<div class="form-group">
+				<label for="latitude">Широта:</label>
+				<input name="latitude" type="text" class="form-control" id="latitude">
+			</div>	
+			<div class="form-group">
+				<label for="longitude">Долгота:</label>
+				<input name="longitude" type="text" class="form-control" id="longitude">
+			</div>			
+			<div class="form-group">
+				<label for="title">Заголовок:</label>
+				<input name="title" type="text" class="form-control" id="title">
+			</div>
+			<div class="form-group">
+				<label for="brief-description">Краткое описание:</label>
+				<textarea name="briefDescription" class="form-control" id="brief-description"></textarea>
+			</div>	
+			<div class="form-group">
+				<label for="description">Полное описание:</label>
+				<textarea name="description" class="form-control" id="description"></textarea>
+			</div>	
+			<div class="form-group">
+				<label for="photo">Добавить фото:</label>
+				<div class="photo-block">
+					<input type="file" name="photo[]" class="form-control">
+				</div>
+				<i class="fa fa-plus-square"></i>
+			</div>	
+			<button type="submit" class="btn btn-success">Сохранить</button>									
+		</div>
+	</form>
 </div>	
 </div>

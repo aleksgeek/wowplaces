@@ -5,7 +5,9 @@ app.directive("myMap", ['objectControlService', function(objectControlService) {
     		latitude: '@',
     		longitude: '@',
     		zoom: '@',
-    		topIndent: '@'
+    		topIndent: '@',
+    		width: '@',
+    		height: '@'
     	},
     	controller: function($scope){
     		var self = this;
@@ -24,15 +26,20 @@ app.directive("myMap", ['objectControlService', function(objectControlService) {
         {
         	element.append('<div></div>');
         	var map_element = element.find('div');
-
-			map_element.css('width', window.innerWidth+'px');
-			map_element.css('height', (window.innerHeight-scope.topIndent)+'px');
+        	
+        	var mode   = scope.mode   || 'show';
+        	var width  = scope.width  || window.innerWidth;
+        	var height = scope.height || window.innerHeight;   
+        	var topIndent = scope.topIndent || 0;
+        	
+			map_element.css('width', width+'px');
+			map_element.css('height', (height-topIndent)+'px');
 			
 			mapCtrl.map = new google.maps.Map(map_element[0], {
                 center: {lat:+scope.latitude, lng:+scope.longitude},
                 zoom: +scope.zoom
             }); 
-            mapCtrl.markerInfoWindow = new google.maps.InfoWindow(); 
+            mapCtrl.markerInfoWindow = new google.maps.InfoWindow();
         }
     };
 }]);

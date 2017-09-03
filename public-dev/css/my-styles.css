@@ -144,3 +144,11 @@ a, a:hover{
 .center-txt{
     text-align: center;
 }
+
+.form{
+	margin-bottom: 15px;
+}
+
+.object-control-form i{
+	cursor:pointer;
+}
