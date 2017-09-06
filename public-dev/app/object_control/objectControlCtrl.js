@@ -1,3 +1,3 @@
-app.controller('objectControlCtrl', ['$scope', function($scope) {
-	var self = this;
-}]);	
+app.controller('objectControlCtrl', ['objectControlService', '$scope', function(objectControlService, $scope) {
+    var self = this;
+}]);    

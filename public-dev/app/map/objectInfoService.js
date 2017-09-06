@@ -4,7 +4,7 @@ app.service('objectInfoService', ['$http', 'config', function($http, config){
 
     var urlGetObjects = config.api_url+'/objects';
 
-	return {
+    return {
         showFullInfo: function()
         {
             self.fullInfoStatus = true;    
