@@ -1,12 +1,23 @@
 app.service('objectControlService', ['$q', '$http', 'config', function($q, $http, config){
     var self = this;
         
-        self.latitude  = null;
-        self.longitude = null;
+        self.tempObjectData = {
+            lat:null,
+            lng:null
+        }
         
     var url_get_objects = config.api_url+'/objects';
 
     return {
+        setTempLatLng: function(lat, lng)
+        {
+            self.tempObjectData.lat  = lat;
+            self.tempObjectData.lng = lng;
+        },
+        getTempObjectData: function()
+        {
+            return self.tempObjectData
+        },
         getAllObjects: function()
         {
             var deferred = $q.defer();

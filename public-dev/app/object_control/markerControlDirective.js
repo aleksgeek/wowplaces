@@ -6,7 +6,7 @@ app.directive("myMarkerControl", ['objectControlService', '$compile', function(o
         {
             var marker = null;
             
-            mapCtrl.map.addListener('rightclick', function(e){ 
+            mapCtrl.map.addListener('click', function(e){ 
                 if(marker){
                     marker.setMap(null);
                 }
@@ -17,7 +17,9 @@ app.directive("myMarkerControl", ['objectControlService', '$compile', function(o
                     title: 'new object'
                 });
                 marker.setMap(mapCtrl.map);
-                mapCtrl.addMarker(marker);                         
+                mapCtrl.addMarker(marker);
+                
+                objectControlService.setTempLatLng(e.latLng.lat(), e.latLng.lng());                        
             });     
             
             scope.$on('$destroy', function(){
