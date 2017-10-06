@@ -1,22 +1,13 @@
 app.service('objectControlService', ['$q', '$http', 'config', function($q, $http, config){
     var self = this;
-        
-        self.tempObjectData = {
-            lat:null,
-            lng:null
-        }
-        
+    
     var url_get_objects = config.api_url+'/objects';
-
+    var controlMarker   = null;
+    
     return {
-        setTempLatLng: function(lat, lng)
+        addControlMarker: function(marker)
         {
-            self.tempObjectData.lat  = lat;
-            self.tempObjectData.lng = lng;
-        },
-        getTempObjectData: function()
-        {
-            return self.tempObjectData
+            controlMarker = marker;
         },
         getAllObjects: function()
         {

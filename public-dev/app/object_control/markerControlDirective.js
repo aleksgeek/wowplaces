@@ -1,4 +1,4 @@
-app.directive("myMarkerControl", ['objectControlService', '$compile', function(objectControlService, $compile) {
+app.directive("myMarkerControl", ['$compile', function($compile) {
     return {
         require: '^myMap',
         restrict : "E",
@@ -18,8 +18,7 @@ app.directive("myMarkerControl", ['objectControlService', '$compile', function(o
                 });
                 marker.setMap(mapCtrl.map);
                 mapCtrl.addMarker(marker);
-                
-                objectControlService.setTempLatLng(e.latLng.lat(), e.latLng.lng());                        
+                mapCtrl.showMarkerControlData(marker);                                   
             });     
             
             scope.$on('$destroy', function(){

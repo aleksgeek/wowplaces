@@ -21,6 +21,10 @@ app.directive("myMap", ['objectControlService', function(objectControlService) {
                 self.showMarkerInfo = function(idObject){
                     $scope.$parent.$broadcast('showMarkerInfo', idObject);    
                 }
+                
+                self.showMarkerControlData = function(marker){
+                    objectControlService.addControlMarker(marker);
+                }
         },
         compile: function compile(element, attrs, transclude) {
             return {
