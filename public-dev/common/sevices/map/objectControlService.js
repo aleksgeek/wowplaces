@@ -9,6 +9,10 @@ app.service('objectControlService', ['$q', '$http', 'config', function($q, $http
         {
             controlMarker = marker;
         },
+        getControlMarker: function()
+        {
+            return controlMarker;
+        },
         getAllObjects: function()
         {
             var deferred = $q.defer();

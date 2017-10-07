@@ -1,6 +1,6 @@
 <div class="container">
 <div class="row">
-    <form class="form" method="post" ng-submit="">
+    <form class="form" method="post" ng-submit="objectControl.save()">
         <div class="col-xs-12 object-control-form">
             <div class="form-group">
                 <label>Показать на карте:</label>
@@ -9,26 +9,18 @@
                 </my-map>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-sm-offset-3 object-control-form">
-            <div class="form-group">
-                <label for="latitude">Широта:</label>
-                <input name="latitude" type="text" class="form-control" ng-model="objectControl.latitude">
-            </div>  
-            <div class="form-group">
-                <label for="longitude">Долгота:</label>
-                <input name="longitude" type="text" class="form-control" id="longitude" ng-model="objectControl.longitude">
-            </div>          
+        <div class="col-xs-12 col-sm-6 col-sm-offset-3 object-control-form">      
             <div class="form-group">
                 <label for="title">Заголовок:</label>
-                <input name="title" type="text" class="form-control" id="title">
+                <input name="title" type="text" class="form-control" ng-model="objectControl.title">
             </div>
             <div class="form-group">
                 <label for="brief-description">Краткое описание:</label>
-                <textarea name="briefDescription" class="form-control" id="brief-description"></textarea>
+                <textarea name="briefDescription" class="form-control"></textarea>
             </div>  
             <div class="form-group">
                 <label for="description">Полное описание:</label>
-                <textarea name="description" class="form-control" id="description"></textarea>
+                <textarea name="description" class="form-control"></textarea>
             </div>  
             <div class="form-group">
                 <label for="photo">Добавить фото:</label>
@@ -36,8 +28,10 @@
                     <input type="file" name="photo[]" class="form-control">
                 </div>
                 <i class="fa fa-plus-square"></i>
-            </div>  
-            <button type="submit" class="btn btn-success">Сохранить</button>                                    
+            </div>
+            <div class="form-group">  
+                <button type="submit" class="btn btn-success">Сохранить</button>
+            </div>                                    
         </div>
     </form>
 </div>  

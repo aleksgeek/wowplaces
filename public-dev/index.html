@@ -37,9 +37,9 @@
                         </a>
                     </li>
                 </ul>     
-		
-				<div class="hidden-xs pull-left">
-					<div ng-include="'app/top_menu/menuValues.html'"></div> 
+        
+                <div class="hidden-xs pull-left">
+                    <div ng-include="'app/top_menu/menuValues.html'"></div> 
                 </div>
 
                 <ul class="nav pull-right">
@@ -77,7 +77,7 @@
                 </ul>           
             </div> 
             <div ng-if="nav.is_menu_open" class="mobile-menu visible-xs" ng-click="nav.toggle_menu()">
-				<div ng-include="'app/top_menu/menuValues.html'"></div>
+                <div ng-include="'app/top_menu/menuValues.html'"></div>
             </div>
         </div>
     </nav>
@@ -94,10 +94,16 @@
     <script src="app/top_menu/topMenuCtrl.js"></script>
     <!-- endbuild -->
 
+    <!--build:app common/directives.js -->
+    <script src="common/directives/map/mapDirective.js"></script>
+    <!-- endbuild -->
+  
+    <!--build:app common/sevices.js -->
+    <script src="common/sevices/map/objectControlService.js"></script>
+    <!-- endbuild -->    
+    
     <!--build:app app/objects.min.js -->
     <script src="app/map/objectsCtrl.js"></script>
-    <script src="app/map/objectControlService.js"></script>
-    <script src="app/map/mapDirective.js"></script>
     <script src="app/map/markerDirective.js"></script>
     <script src="app/map/markerContextDirective.js"></script>
     <script src="app/map/markerInfoDirective.js"></script>

@@ -19,7 +19,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         controller   : 'objectsCtrl as objects'
     }).state('object_control', {
         url: "/object_control",
-        templateUrl  : "app/object_control/object_form.html",
+        templateUrl  : "app/object_control/objectForm.html",
         controller   : 'objectControlCtrl as objectControl'
     }).state('tourist_guide', {
         url: "/tourist_guide",
