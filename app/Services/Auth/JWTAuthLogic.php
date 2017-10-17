@@ -16,12 +16,12 @@ class JWTAuthLogic implements AuthLogic
     /**
      * @var JWTAuth
      */
-    protected $jwt_auth;
+    protected $jwtAuth;
 
-    public function __construct(Cache $cache, JWTAuth $jwt_auth)
+    public function __construct(Cache $cache, JWTAuth $jwtAuth)
     {
         $this->cache = $cache;
-        $this->jwt_auth = $jwt_auth;
+        $this->jwtAuth = $jwtAuth;
     }
 
     /**
@@ -33,9 +33,9 @@ class JWTAuthLogic implements AuthLogic
      *
      * @throws AuthorizationException
      */
-    public function getToken(array $credentials, array $custom_claims)
+    public function getToken(array $credentials, array $customClaims)
     {
-	    $token = $this->jwt_auth->attempt($credentials, $custom_claims);
+	    $token = $this->jwtAuth->attempt($credentials, $customClaims);
 
 	    if (trim($token)) {
             return $token;
@@ -52,12 +52,12 @@ class JWTAuthLogic implements AuthLogic
      */ 
     public function createApproveRegisterParam(array $credentials)
     {
-        $json_credentials = json_encode($credentials);
-        $md5_credentails  = md5($json_credentials.'_'.date("Y-m-d H:i:s"));
+        $jsonCredentials = json_encode($credentials);
+        $md5Credentails  = md5($jsonCredentials.'_'.date("Y-m-d H:i:s"));
 
-        $this->cache->add($md5_credentails, $json_credentials, 12);
+        $this->cache->add($md5Credentails, $jsonCredentials, 12);
 
-        return $md5_credentails;           
+        return $md5Credentails;           
     }
 
     /**
@@ -68,12 +68,12 @@ class JWTAuthLogic implements AuthLogic
      *
      * @throws AuthorizationException
      */ 
-    public function getApproveRegisterCredentials($approve_param)
+    public function getApproveRegisterCredentials($approveParam)
     {
-        $json_credentials = $this->cache->get($approve_param);
+        $jsonCredentials = $this->cache->get($approveParam);
 
-        if($json_credentials){
-            return json_decode($json_credentials, 1);
+        if($jsonCredentials){
+            return json_decode($jsonCredentials, 1);
         }
 
         throw new AuthorizationException("register approve_param is invalid", 401);
@@ -88,7 +88,7 @@ class JWTAuthLogic implements AuthLogic
      */
     public function getAuthenticatedUser()
     {
-        $user = $this->jwt_auth->parseToken()->authenticate(); 
+        $user = $this->jwtAuth->parseToken()->authenticate(); 
 
         if ($user) {
             return $user;

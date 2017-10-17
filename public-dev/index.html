@@ -31,25 +31,25 @@
                 </a>
 
                 <ul class="nav pull-left visible-xs">
-                    <li ng-class="{ 'open': nav.is_menu_open }">
-                        <a href class="menu-a" ng-click="nav.toggle_menu()">
+                    <li ng-class="{ 'open': nav.isMenuOpen }">
+                        <a href class="menu-a" ng-click="nav.toggleMenu()">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </a>
                     </li>
                 </ul>     
         
                 <div class="hidden-xs pull-left">
-                    <div ng-include="'app/top_menu/menuValues.html'"></div> 
+                    <div ng-include="'app/top-menu/menuValues.html'"></div> 
                 </div>
 
                 <ul class="nav pull-right">
-                    <li ng-controller="authCtrl as auth" ng-class="{ 'open': auth.open_form }"> 
-                        <a href class="menu-a menu-a-auth pull-right" ng-click="auth.toggle_form()">
-                            <span ng-if="!auth.is_logined">войти/регистрация</span>
-                            <span ng-if="auth.is_logined">{{auth.user_data.name}}</span>
+                    <li ng-controller="authCtrl as auth" ng-class="{ 'open': auth.openForm }"> 
+                        <a href class="menu-a menu-a-auth pull-right" ng-click="auth.toggleForm()">
+                            <span ng-if="!auth.isLogined">войти/регистрация</span>
+                            <span ng-if="auth.isLogined">{{auth.user_data.name}}</span>
                             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                         </a>                 
-                        <div class="auth-form" ng-if="!auth.is_logined && auth.open_form">
+                        <div class="auth-form" ng-if="!auth.isLogined && auth.openForm">
                             <form method="post" ng-submit="auth.authenticate()">
                                 <div class="form-group">
                                     <label for="email">Ваш email</label>
@@ -59,12 +59,12 @@
                                     <label for="password">Ваш пароль</label>
                                     <input class="form-control" type="password" name="password" ng-model="auth.password" required>
                                 </div>
-                                <div class="error" ng-if="auth.login_error">некорректный логин или пароль</div>
+                                <div class="error" ng-if="auth.loginError">некорректный логин или пароль</div>
                                 <button type="submit" class="btn btn-success btn-sm">войти</button>                               
-                                <a ui-sref="register" class="btn btn-primary btn-sm" ng-click="auth.toggle_form()">регистрация</a>
+                                <a ui-sref="register" class="btn btn-primary btn-sm" ng-click="auth.toggleForm()">регистрация</a>
                             </form>
                         </div>
-                        <div class="auth-form" ng-if="auth.is_logined && auth.open_form">
+                        <div class="auth-form" ng-if="auth.isLogined && auth.openForm">
                             <form method="post" ng-submit="auth.logout()">
                                 <div>
                                     {{auth.user_data.email}}
@@ -76,8 +76,8 @@
                     </li>
                 </ul>           
             </div> 
-            <div ng-if="nav.is_menu_open" class="mobile-menu visible-xs" ng-click="nav.toggle_menu()">
-                <div ng-include="'app/top_menu/menuValues.html'"></div>
+            <div ng-if="nav.isMenuOpen" class="mobile-menu visible-xs" ng-click="nav.toggleMenu()">
+                <div ng-include="'app/top-menu/menuValues.html'"></div>
             </div>
         </div>
     </nav>
@@ -91,7 +91,7 @@
 
     <!--build:app app/app.min.js -->
     <script src="app/app.js"></script> 
-    <script src="app/top_menu/topMenuCtrl.js"></script>
+    <script src="app/top-menu/topMenuCtrl.js"></script>
     <!-- endbuild -->
 
     <!--build:app common/directives.js -->
@@ -118,12 +118,12 @@
     <!-- endbuild -->
     
     <!--build:app app/object-control.min.js -->
-    <script src="app/object_control/objectControlCtrl.js"></script>
-    <script src="app/object_control/markerControlDirective.js"></script>
+    <script src="app/object-control/objectControlCtrl.js"></script>
+    <script src="app/object-control/markerControlDirective.js"></script>
     <!-- endbuild -->
     
     <!--build:app app/tourist-guide.min.js -->
-    <script src="app/tourist_guide/touristGuideCtrl.js"></script>
+    <script src="app/tourist-guide/touristGuideCtrl.js"></script>
     <!-- endbuild -->
 </body>
 </html>

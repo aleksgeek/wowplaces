@@ -2,6 +2,6 @@ app.controller('objectControlCtrl', ['objectControlService', '$scope', function(
     var self = this;    
     
     self.save = function(){
-		console.log(objectControlService.getControlMarker().position.lat());
+        console.log(objectControlService.getControlMarker().position.lat());
     }
 }]);    

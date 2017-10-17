@@ -13,30 +13,30 @@ class ObjectsController extends Controller
 
     public function __construct(ObjectsRepository $objects)
     {
-        $this->objects_repository = $objects;
+        $this->objectsRepository = $objects;
     }
 
-	/**
+    /**
      * get all objects
      *
      * @param Illuminate\Http\Request $request
      * @return string
-	 */
-	public function getObjects(Request $request)
-	{
-		$places = $this->objects_repository->getAllObjects();
+     */
+    public function getObjects(Request $request)
+    {
+        $places = $this->objectsRepository->getAllObjects();
         return response()->json($places); 
-	}
+    }
 
     /**
      * get object data by id
      *
-     * @param  mixed  $id_place
+     * @param  mixed  $idPlace
      * @return string
      */
-    public function getObjectById($id_place)
+    public function getObjectById($idPlace)
     {
-        $places = $this->objects_repository->getObjectById($id_place);
+        $places = $this->objectsRepository->getObjectById($idPlace);
 
         if(empty($places)){
             return response()->json('object was not found', 404); 

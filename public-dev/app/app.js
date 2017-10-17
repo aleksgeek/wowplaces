@@ -17,20 +17,20 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: "/objects",
         templateUrl  : "app/map/objects.html",
         controller   : 'objectsCtrl as objects'
-    }).state('object_control', {
-        url: "/object_control",
-        templateUrl  : "app/object_control/objectForm.html",
+    }).state('object-control', {
+        url: "/object-control",
+        templateUrl  : "app/object-control/objectForm.html",
         controller   : 'objectControlCtrl as objectControl'
-    }).state('tourist_guide', {
-        url: "/tourist_guide",
-        templateUrl  : "app/tourist_guide/countries.html",
+    }).state('tourist-guide', {
+        url: "/tourist-guide",
+        templateUrl  : "app/tourist-guide/countries.html",
         controller   : 'touristGuideCtrl as touristGuide'
     }).state('register', {
         url: "/register",
         templateUrl  : "app/auth/register.html",
         controller   : 'registerCtrl as register'
-    }).state('register_approve', {
-        url: "/register_approve/:tmp_auth",
+    }).state('register-approve', {
+        url: "/register-approve/:tmpAuth",
         templateUrl  : "app/auth/registerApprove.html",
         controller   : 'registerApproveCtrl as registerApprove'
     });

@@ -2,15 +2,15 @@ app.controller('registerCtrl', ['authService', '$scope', function(authService, $
     var self = this;
 
     self.error = false;
-    self.is_registered = false;
+    self.isRegistered = false;
 
-    self.register_a = function(){
-        authService.register(self.login_name, self.email, self.password, self.password_confirmation).then(function(data){
+    self.registerA = function(){
+        authService.register(self.loginName, self.email, self.password, self.passwordConfirmation).then(function(data){
             self.error = false;
-            self.is_registered = true;
+            self.isRegistered = true;
             console.log(data);
         }).catch(function(error){
-            self.is_registered = false;
+            self.isRegistered = false;
             self.error = true;
             console.log(error);
         });

@@ -16,12 +16,12 @@ class AuthController extends Controller
     /**
      * @var UserRepository
      */
-    protected $user_repository;
+    protected $userRepository;
 
     /**
      * @var AuthLogic
      */
-    protected $auth_logic;
+    protected $authLogic;
 
     /**
      * @var Mailer
@@ -35,8 +35,8 @@ class AuthController extends Controller
 
     public function __construct(UserRepository $user, AuthLogic $auth, Mailer $mail, CacheManager $cache)
     {
-        $this->user_repository = $user;
-        $this->auth_logic = $auth;
+        $this->userRepository = $user;
+        $this->authLogic = $auth;
         $this->mailer = $mail;
         $this->cache  = $cache;
     }
@@ -52,8 +52,8 @@ class AuthController extends Controller
     public function authenticate(AuthAuthenticate $request)
     {         
         try{
-            $custom_claims = $this->user_repository->getByEmail($request['email']);
-            $token = $this->auth_logic->getToken(['email'=>$request['email'], 'password'=>$request['password']], $custom_claims);
+            $custom_claims = $this->userRepository->getByEmail($request['email']);
+            $token = $this->authLogic->getToken(['email'=>$request['email'], 'password'=>$request['password']], $custom_claims);
 
             return response()->json($token); 
         }catch(AuthorizationException $e){
@@ -69,8 +69,8 @@ class AuthController extends Controller
      */
     public function register(AuthRegister $request)
     {
-        $user = $this->user_repository->save($request);
-        $approve_param = $this->auth_logic->createApproveRegisterParam(['email'=>$user->email, 'password'=>$user->password]);
+        $user = $this->userRepository->save($request);
+        $approve_param = $this->authLogic->createApproveRegisterParam(['email'=>$user->email, 'password'=>$user->password]);
         
         $this->cache->put('approve_param_'.$user->email, $approve_param, 60);
         
@@ -103,7 +103,7 @@ class AuthController extends Controller
     /**
      * approve user authorization by hash param from email
      *
-     * @param string $approve_param
+     * @param string $approveParam
      * @return string
      *
      * @throws AuthorizationException
@@ -111,10 +111,10 @@ class AuthController extends Controller
     public function registerApprove($approve_param)
     { 
         try{
-            $credentails = $this->auth_logic->getApproveRegisterCredentials($approve_param);
+            $credentails = $this->authLogic->getApproveRegisterCredentials($approve_param);
             
             if(isset($credentails['email']) and isset($credentails['password'])){
-                if($this->user_repository->confirm($credentails)){
+                if($this->userRepository->confirm($credentails)){
                     return response()->json('confirm ok'); 
                 }
             }

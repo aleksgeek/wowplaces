@@ -1,25 +1,25 @@
 app.service('voteService', ['$http', 'authService', 'config', function($http, authService, config){
-	var self = this;
-	
-	return {
-		make_vote: function(id_object, vote){
-			var good = bad = 0;
+    var self = this;
+    
+    return {
+        makeVote: function(idObject, vote){
+            var good = bad = 0;
 
-			if(vote=='good'){
-				good = 1;
-			}else{
-				bad = 1;
-			}
+            if(vote=='good'){
+                good = 1;
+            }else{
+                bad = 1;
+            }
 
-			$http.post(config.api_url+'/vote', {id_object:id_object, good:good, bad:bad}, {headers: {
-		        'Authorization': 'Bearer ' + authService.getToken()
-		    }})
-			.success(function(data){
-				console.log(data);	
-			})
-			.error(function(data){
-				console.log(data);	
-			});
-		}
-	}
+            $http.post(config.api_url+'/vote', {idObject:idObject, good:good, bad:bad}, {headers: {
+                'Authorization': 'Bearer ' + authService.getToken()
+            }})
+            .success(function(data){
+                console.log(data);  
+            })
+            .error(function(data){
+                console.log(data);  
+            });
+        }
+    }
 }]);

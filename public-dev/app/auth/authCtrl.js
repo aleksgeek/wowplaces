@@ -1,30 +1,30 @@
 app.controller('authCtrl', ['authService', function(authService) {
-	var self = this;
+    var self = this;
 
-    self.is_logined  = authService.isLogined(); 
-    self.user_data   = authService.getAuthUser();
-    self.login_error = false;
-    self.open_form   = false;
+    self.isLogined  = authService.isLogined(); 
+    self.userData   = authService.getAuthUser();
+    self.loginError = false;
+    self.openForm   = false;
 
     self.authenticate = function(){
         authService.login(self.email, self.password)
         .then(function(data){
-            self.is_logined = authService.isLogined();  
-            self.user_data  = authService.getAuthUser();
-            self.toggle_form();                            
+            self.isLogined = authService.isLogined();  
+            self.userData  = authService.getAuthUser();
+            self.toggleForm();                            
         }).catch(function(data){
-            self.login_error = true;
+            self.loginError = true;
         });
     };
 
     self.logout = function(){
-		authService.logout();
-        self.is_logined = authService.isLogined(); 
-        self.toggle_form();
+        authService.logout();
+        self.isLogined = authService.isLogined(); 
+        self.toggleForm();
     };
 
-    self.toggle_form = function(){
-        self.open_form = !self.open_form;
+    self.toggleForm = function(){
+        self.openForm = !self.openForm;
     }
 
 }]);

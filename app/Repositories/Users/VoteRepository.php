@@ -9,53 +9,53 @@ use InvalidArgumentException;
 
 class VoteRepository
 {
-	/**
+    /**
      * create not approved user
      *
-     * @param  mixed  $id_object
+     * @param  mixed  $idObject
      * @param  string  $rating
      * @param  mixed  $user_id
      * @return bool
      * @throws InvalidArgumentException
-	 */
-	public function makeVote($id_object, $rating, $user_id)
-	{
-		if('up'==$rating){
-			ObjectsList::where('id', $id_object)->increment('rating_good');
-			$rating_good = 1;	
-			$rating_bad  = 0;	
-		}elseif('down'==$rating){
-			ObjectsList::where('id', $id_object)->increment('rating_bad');
-			$rating_good = 0;	
-			$rating_bad  = 1;
-		}
+     */
+    public function makeVote($idObject, $rating, $userId)
+    {
+        if('up'==$rating){
+            ObjectsList::where('id', $idObject)->increment('rating_good');
+            $ratingGood = 1;   
+            $ratingBad  = 0;   
+        }elseif('down'==$rating){
+            ObjectsList::where('id', $idObject)->increment('rating_bad');
+            $ratingGood = 0;   
+            $ratingBad  = 1;
+        }
 
-		$user = new UsersVotes();
-		$user->id_user   = $user_id;
-		$user->id_object = $id_object;
-		$user->rating_good = $rating_good;
-		$user->rating_bad  = $rating_bad;
-		$user->save();
+        $user = new UsersVotes();
+        $user->id_user   = $userId;
+        $user->id_object = $idObject;
+        $user->rating_good = $ratingGood;
+        $user->rating_bad  = $ratingBad;
+        $user->save();
 
-		return true;	
-	}
+        return true;    
+    }
 
-	/**
+    /**
      * check may whether vote
      *
-     * @param  mixed  $id_object
+     * @param  mixed  $idObject
      * @param  mixed  $user_id
      * @return bool
      * @throws RuntimeException
-	 */
-	public function canVote($id_object, $user_id)
-	{
-		$existing_user = UsersVotes::where('id_user', $user_id)->where('id_object', $id_object)->get();
-		
-		if($existing_user->isEmpty()){
-			return true;
-		}else{
-			return false;
-		}
-	}
+     */
+    public function canVote($idObject, $userId)
+    {
+        $existingUser = UsersVotes::where('id_user', $userId)->where('id_object', $idObject)->get();
+        
+        if($existingUser->isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

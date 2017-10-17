@@ -1,3 +1,3 @@
 app.controller('touristGuideCtrl', ['$scope', function($scope) {
-	var self = this;
-}]);	
+    var self = this;
+}]);    
