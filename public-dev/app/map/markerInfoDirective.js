@@ -10,7 +10,7 @@ app.directive("myMarkerInfo", ['$rootScope', 'objectControlService', function($r
                     <i class="fa fa-arrow-right pointer"></i>
                 </div>
                 <div class="pull-left">
-                    <a ui-sref="object-control"><i class="fa fa-edit pointer"></i></a>
+                    <a ui-sref="place-control"><i class="fa fa-edit pointer"></i></a>
                 </div>
                 <div class="title"> {{$parent.title}} </div>
                 <div class="center-txt">  

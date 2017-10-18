@@ -17,10 +17,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: "/objects",
         templateUrl  : "app/map/objects.html",
         controller   : 'objectsCtrl as objects'
-    }).state('object-control', {
-        url: "/object-control",
-        templateUrl  : "app/object-control/objectForm.html",
-        controller   : 'objectControlCtrl as objectControl'
+    }).state('place-control', {
+        url: "/place-control",
+        templateUrl  : "app/place-control/placeForm.html",
+        controller   : 'placeControlCtrl as placeControl'
     }).state('tourist-guide', {
         url: "/tourist-guide",
         templateUrl  : "app/tourist-guide/countries.html",

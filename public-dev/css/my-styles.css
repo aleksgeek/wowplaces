@@ -152,3 +152,10 @@ a, a:hover{
 .object-control-form i{
     cursor:pointer;
 }
+
+.red-underline{
+    border-bottom: 1px solid red;
+}
+.green-underline{
+    border-bottom: 1px solid green;
+}
