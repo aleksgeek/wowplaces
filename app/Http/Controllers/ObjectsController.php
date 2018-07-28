@@ -9,7 +9,7 @@ class ObjectsController extends Controller
     /**
      * @var ObjectsRepository
      */
-    protected $objects_repository;
+    protected $objectsRepository;
 
     public function __construct(ObjectsRepository $objects)
     {

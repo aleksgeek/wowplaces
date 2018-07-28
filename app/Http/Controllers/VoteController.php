@@ -35,7 +35,7 @@ class VoteController extends Controller
     public function makeVoting(Request $request)
     {
         try{
-            $id_object = $request->input('id_object');
+            $idObject  = $request->input('id_object');
             $rating    = $request->input('rating');  
             $user      = $this->authLogic->getAuthenticatedUser();
 
@@ -43,8 +43,8 @@ class VoteController extends Controller
                 throw new InvalidArgumentException('argument $rating is not correct', 400);
             }
 
-            if($this->voteRepository->canVote($id_object, $user['id'])){
-                $this->voteRepository->makeVote($id_object, $rating, $user['id']);
+            if($this->voteRepository->canVote($idObject, $user['id'])){
+                $this->voteRepository->makeVote($idObject, $rating, $user['id']);
                 return response()->json('vote was successful'); 
             }else{      
                 return response()->json('you have already voted', 400);

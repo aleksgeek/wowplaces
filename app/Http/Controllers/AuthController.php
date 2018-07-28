@@ -52,8 +52,8 @@ class AuthController extends Controller
     public function authenticate(AuthAuthenticate $request)
     {         
         try{
-            $custom_claims = $this->userRepository->getByEmail($request['email']);
-            $token = $this->authLogic->getToken(['email'=>$request['email'], 'password'=>$request['password']], $custom_claims);
+            $customClaims = $this->userRepository->getByEmail($request['email']);
+            $token = $this->authLogic->getToken(['email'=>$request['email'], 'password'=>$request['password']], $customClaims);
 
             return response()->json($token); 
         }catch(AuthorizationException $e){
@@ -70,9 +70,9 @@ class AuthController extends Controller
     public function register(AuthRegister $request)
     {
         $user = $this->userRepository->save($request);
-        $approve_param = $this->authLogic->createApproveRegisterParam(['email'=>$user->email, 'password'=>$user->password]);
+        $approveParam = $this->authLogic->createApproveRegisterParam(['email'=>$user->email, 'password'=>$user->password]);
         
-        $this->cache->put('approve_param_'.$user->email, $approve_param, 60);
+        $this->cache->put('approve_param_'.$user->email, $approveParam, 60);
         
         return response()->json('user was successfuly created');
     }
@@ -86,10 +86,10 @@ class AuthController extends Controller
     public function sendRegisterApproveMail(Request $request)
     {
         $recipient_email = $request->input('recipient_email'); 
-        $approve_param   = $this->cache->get('approve_param_'.$recipient_email);
-        $approve_url     = route('register-approve', ['approve_param'=>$approve_param]); 
+        $approveParam    = $this->cache->get('approve_param_'.$recipient_email);
+        $approveUrl      = route('register-approve', ['approve_param'=>$approveParam]); 
 
-        $this->mailer->send('emails.register_approve', ['url'=>$approve_url], function ($m) {
+        $this->mailer->send('emails.register_approve', ['url'=>$approveUrl], function ($m) {
             $m->to($recipient_email);
         });
 
@@ -108,10 +108,10 @@ class AuthController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function registerApprove($approve_param)
+    public function registerApprove($approveParam)
     { 
         try{
-            $credentails = $this->authLogic->getApproveRegisterCredentials($approve_param);
+            $credentails = $this->authLogic->getApproveRegisterCredentials($approveParam);
             
             if(isset($credentails['email']) and isset($credentails['password'])){
                 if($this->userRepository->confirm($credentails)){
