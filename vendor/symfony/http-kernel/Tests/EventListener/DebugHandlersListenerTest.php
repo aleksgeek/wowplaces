@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\HttpKernel\Tests\EventListener;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -28,11 +29,9 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * DebugHandlersListenerTest.
- *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class DebugHandlersListenerTest extends \PHPUnit_Framework_TestCase
+class DebugHandlersListenerTest extends TestCase
 {
     public function testConfigure()
     {
@@ -130,5 +129,27 @@ class DebugHandlersListenerTest extends \PHPUnit_Framework_TestCase
             ->method('renderException');
 
         $xHandler(new \Exception());
+    }
+
+    public function testReplaceExistingExceptionHandler()
+    {
+        $userHandler = function () {};
+        $listener = new DebugHandlersListener($userHandler);
+        $eHandler = new ErrorHandler();
+        $eHandler->setExceptionHandler('var_dump');
+
+        $exception = null;
+        set_exception_handler(array($eHandler, 'handleException'));
+        try {
+            $listener->configure();
+        } catch (\Exception $exception) {
+        }
+        restore_exception_handler();
+
+        if (null !== $exception) {
+            throw $exception;
+        }
+
+        $this->assertSame($userHandler, $eHandler->setExceptionHandler('var_dump'));
     }
 }

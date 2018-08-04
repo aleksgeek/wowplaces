@@ -2,10 +2,12 @@
 
 namespace Illuminate\Notifications\Messages;
 
-use Carbon\Carbon;
+use Illuminate\Support\InteractsWithTime;
 
 class SlackAttachment
 {
+    use InteractsWithTime;
+
     /**
      * The attachment's title.
      *
@@ -56,6 +58,41 @@ class SlackAttachment
     public $markdown;
 
     /**
+     * The attachment's image url.
+     *
+     * @var string
+     */
+    public $imageUrl;
+
+    /**
+     * The attachment's thumb url.
+     *
+     * @var string
+     */
+    public $thumbUrl;
+
+    /**
+     * The attachment author's name.
+     *
+     * @var string
+     */
+    public $authorName;
+
+    /**
+     * The attachment author's link.
+     *
+     * @var string
+     */
+    public $authorLink;
+
+    /**
+     * The attachment author's icon.
+     *
+     * @var string
+     */
+    public $authorIcon;
+
+    /**
      * The attachment's footer.
      *
      * @var string
@@ -80,7 +117,7 @@ class SlackAttachment
      * Set the title of the attachment.
      *
      * @param  string  $title
-     * @param  string  $url
+     * @param  string|null  $url
      * @return $this
      */
     public function title($title, $url = null)
@@ -133,7 +170,7 @@ class SlackAttachment
     /**
      * Add a field to the attachment.
      *
-     * @param  \Closure|array $title
+     * @param  \Closure|string $title
      * @param  string $content
      * @return $this
      */
@@ -181,6 +218,49 @@ class SlackAttachment
     }
 
     /**
+     * Set the image URL.
+     *
+     * @param  string  $url
+     * @return $this
+     */
+    public function image($url)
+    {
+        $this->imageUrl = $url;
+
+        return $this;
+    }
+
+    /**
+     * Set the URL to the attachment thumbnail.
+     *
+     * @param  string  $url
+     * @return $this
+     */
+    public function thumb($url)
+    {
+        $this->thumbUrl = $url;
+
+        return $this;
+    }
+
+    /**
+     * Set the author of the attachment.
+     *
+     * @param  string  $name
+     * @param  string|null  $link
+     * @param  string|null  $icon
+     * @return $this
+     */
+    public function author($name, $link = null, $icon = null)
+    {
+        $this->authorName = $name;
+        $this->authorLink = $link;
+        $this->authorIcon = $icon;
+
+        return $this;
+    }
+
+    /**
      * Set the footer content.
      *
      * @param  string  $footer
@@ -209,12 +289,12 @@ class SlackAttachment
     /**
      * Set the timestamp.
      *
-     * @param  Carbon  $timestamp
+     * @param  \DateTimeInterface|\DateInterval|int  $timestamp
      * @return $this
      */
-    public function timestamp(Carbon $timestamp)
+    public function timestamp($timestamp)
     {
-        $this->timestamp = $timestamp->getTimestamp();
+        $this->timestamp = $this->availableAt($timestamp);
 
         return $this;
     }

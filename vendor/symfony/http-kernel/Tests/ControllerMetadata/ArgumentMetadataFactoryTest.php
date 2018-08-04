@@ -12,13 +12,14 @@
 namespace Symfony\Component\HttpKernel\Tests\ControllerMetadata;
 
 use Fake\ImportedAndFake;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
 use Symfony\Component\HttpKernel\Tests\Fixtures\Controller\BasicTypesController;
 use Symfony\Component\HttpKernel\Tests\Fixtures\Controller\NullableController;
 use Symfony\Component\HttpKernel\Tests\Fixtures\Controller\VariadicController;
 
-class ArgumentMetadataFactoryTest extends \PHPUnit_Framework_TestCase
+class ArgumentMetadataFactoryTest extends TestCase
 {
     /**
      * @var ArgumentMetadataFactory
@@ -125,11 +126,11 @@ class ArgumentMetadataFactoryTest extends \PHPUnit_Framework_TestCase
         ), $arguments);
     }
 
-    private function signature1(ArgumentMetadataFactoryTest $foo, array $bar, callable $baz)
+    private function signature1(self $foo, array $bar, callable $baz)
     {
     }
 
-    private function signature2(ArgumentMetadataFactoryTest $foo = null, FakeClassThatDoesNotExist $bar = null, ImportedAndFake $baz = null)
+    private function signature2(self $foo = null, FakeClassThatDoesNotExist $bar = null, ImportedAndFake $baz = null)
     {
     }
 

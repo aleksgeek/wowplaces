@@ -2,7 +2,7 @@ app.controller('registerApproveCtrl', ['authService', '$stateParams', function(a
     var self = this;
     self.isSuccess = false;
 
-    if(!!$stateParams.tmp_auth){
+    if($stateParams.tmpAuth){
         authService.registerApprove($stateParams.tmpAuth)
         .then(function(data){
             self.isSuccess = true;

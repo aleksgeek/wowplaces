@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Profiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Profiler\FileProfilerStorage;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
-class FileProfilerStorageTest extends \PHPUnit_Framework_TestCase
+class FileProfilerStorageTest extends TestCase
 {
     private $tmpDir;
     private $storage;
@@ -82,22 +83,22 @@ class FileProfilerStorageTest extends \PHPUnit_Framework_TestCase
         $profile = new Profile('simple_quote');
         $profile->setUrl('http://foo.bar/\'');
         $this->storage->write($profile);
-        $this->assertTrue(false !== $this->storage->read('simple_quote'), '->write() accepts single quotes in URL');
+        $this->assertNotFalse($this->storage->read('simple_quote'), '->write() accepts single quotes in URL');
 
         $profile = new Profile('double_quote');
         $profile->setUrl('http://foo.bar/"');
         $this->storage->write($profile);
-        $this->assertTrue(false !== $this->storage->read('double_quote'), '->write() accepts double quotes in URL');
+        $this->assertNotFalse($this->storage->read('double_quote'), '->write() accepts double quotes in URL');
 
         $profile = new Profile('backslash');
         $profile->setUrl('http://foo.bar/\\');
         $this->storage->write($profile);
-        $this->assertTrue(false !== $this->storage->read('backslash'), '->write() accepts backslash in URL');
+        $this->assertNotFalse($this->storage->read('backslash'), '->write() accepts backslash in URL');
 
         $profile = new Profile('comma');
         $profile->setUrl('http://foo.bar/,');
         $this->storage->write($profile);
-        $this->assertTrue(false !== $this->storage->read('comma'), '->write() accepts comma in URL');
+        $this->assertNotFalse($this->storage->read('comma'), '->write() accepts comma in URL');
     }
 
     public function testStoreDuplicateToken()
@@ -246,7 +247,7 @@ class FileProfilerStorageTest extends \PHPUnit_Framework_TestCase
         $profile->setMethod('GET');
         $this->storage->write($profile);
 
-        $this->assertTrue(false !== $this->storage->read('token1'));
+        $this->assertNotFalse($this->storage->read('token1'));
         $this->assertCount(1, $this->storage->find('127.0.0.1', '', 10, 'GET'));
 
         $profile = new Profile('token2');
@@ -255,7 +256,7 @@ class FileProfilerStorageTest extends \PHPUnit_Framework_TestCase
         $profile->setMethod('GET');
         $this->storage->write($profile);
 
-        $this->assertTrue(false !== $this->storage->read('token2'));
+        $this->assertNotFalse($this->storage->read('token2'));
         $this->assertCount(2, $this->storage->find('127.0.0.1', '', 10, 'GET'));
 
         $this->storage->purge();

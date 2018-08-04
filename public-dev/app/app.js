@@ -3,7 +3,7 @@
 var app = angular.module('wowPlaces', ['ui.router']);
 
 app.constant('config', {
-    "api_url":"http://localhost/wowplaces/public-dev/index.php/api",
+    "api_url":"http://192.168.10.10/api",
     "url":{
         "login":"index.php/api/authenticate",
         "get_user":"index.php/api/user",

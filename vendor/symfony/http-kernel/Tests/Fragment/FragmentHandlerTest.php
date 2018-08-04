@@ -11,14 +11,15 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Fragment;
 
-use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 
 /**
  * @group time-sensitive
  */
-class FragmentHandlerTest extends \PHPUnit_Framework_TestCase
+class FragmentHandlerTest extends TestCase
 {
     private $requestStack;
 
@@ -87,7 +88,7 @@ class FragmentHandlerTest extends \PHPUnit_Framework_TestCase
         ;
 
         if ($arguments) {
-            call_user_func_array(array($e, 'with'), $arguments);
+            \call_user_func_array(array($e, 'with'), $arguments);
         }
 
         $handler = new FragmentHandler($this->requestStack);
