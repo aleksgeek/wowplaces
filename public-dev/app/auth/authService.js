@@ -64,12 +64,12 @@ app.service('authService', ['$q', '$http', 'config', function($q, $http, config)
 
             return deferred.promise;
         },
-        register: function(loginName, email, password, passwordConfirmation)
+        register: function(name, email, password, passwordConfirmation)
         {
             var deferred = $q.defer();
 
             $http.post(config.api_url+'/register', 
-                {loginName:loginName, email:email, password:password, passwordConfirmation:passwordConfirmation})
+                {name:name, email:email, password:password, password_confirmation:passwordConfirmation})
             .then(
                 function(resp){
                     deferred.resolve(resp.data);

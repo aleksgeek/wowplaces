@@ -17,7 +17,7 @@ Route::group(['middleware'=>'throttle'], function () {
 
 	// auth
 	Route::post('/authenticate', ['uses'=>'AuthController@authenticate', 'as'=>'post-auth']);
-	Route::post('/register', ['uses'=>'AuthController@register', 'as'=>'post-register']);
+	Route::any('/register', ['uses'=>'AuthController@register', 'as'=>'post-register']);
 	Route::post('/register/mail', ['uses'=>'AuthController@sendRegisterApproveMail']);
 	Route::get('/register/approve/{approve_param}', ['uses'=>'AuthController@registerApprove', 'as'=>'register-approve']);
 
