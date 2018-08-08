@@ -3,6 +3,7 @@ namespace App\Repositories\Users;
 
 use App\Models\Users;
 use App\Exceptions\SaveToDBException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository
 {
@@ -38,17 +39,26 @@ class UserRepository
     /**
      * get user data by email
      *
-     * @param  mixed $email
-     * @return array
+     * @param string $email
+     * @param integer $isApproved
+     * @return User
+     * 
+     * @throws AuthorizationException
      */ 
-    public function getByEmail($email)
+    public function getByEmail($email, $isApproved = null)
     {
-        $user = Users::where('email', '=', $email)->first();
+        $user = Users::select('name', 'email', 'password', 'approve')
+			->where('email', '=', $email);
+			
+		if($isApproved!=null){
+			$user = $user->where('approve', '=', $isApproved);
+		}	
+		$user = $user->first();	
+	
+		if($user){
+			return $user;
+		}
         
-        if($user){
-            return ['name'=>$user->name, 'email'=>$user->email];    
-        }else{
-            return [];
-        }
+        throw new ModelNotFoundException("cannot find user by email - $email", 400);
     }
 }

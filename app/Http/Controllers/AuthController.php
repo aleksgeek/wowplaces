@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthAuthenticate;
 use App\Http\Requests\AuthRegister;
@@ -48,17 +49,20 @@ class AuthController extends Controller
      * @return string
      *
      * @throws AuthorizationException
+     * @throws ModelNotFoundException
      */
     public function authenticate(AuthAuthenticate $request)
-    {         
+    {	        
         try{
-            $customClaims = $this->userRepository->getByEmail($request['email']);
-            $token = $this->authLogic->getToken(['email'=>$request['email'], 'password'=>$request['password']], $customClaims);
-
-            return response()->json($token); 
+            $user  = $this->userRepository->getByEmail($request->email, 1);
+			$token = $this->authLogic->getToken(['email'=>$request->email, 'password'=>$request->password], $user);
+			
+			return response()->json($token);
         }catch(AuthorizationException $e){
             return response()->json('invalid credentials', $e->getCode());
-        }         
+        }catch(ModelNotFoundException $e){
+			return response()->json('bad enter data', $e->getCode());
+		}         
     }
 
     /**

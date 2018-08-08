@@ -25,16 +25,18 @@ class JWTAuthLogic implements AuthLogic
     }
 
     /**
-     * Creating jwt token by user credentials. This token contains user data ($custom_claims)
+     * Creating jwt token by user credentials.
      *
      * @param  array $credentials
-     * @param  array $custom_claims
+     * @param  App\Models\Users $user
      * @return string
      *
      * @throws AuthorizationException
      */
-    public function getToken(array $credentials, array $customClaims)
+    public function getToken($credentials, $user)
     {
+		$customClaims = ['email'=>$user->email, 'name'=>$user->name];
+		
 	    $token = $this->jwtAuth->attempt($credentials, $customClaims);
 
 	    if (trim($token)) {

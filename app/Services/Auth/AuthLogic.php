@@ -6,7 +6,7 @@ interface AuthLogic
     /**
      * get user token   
      */
-    public function getToken(array $credentials, array $customClaims);
+    public function getToken($credentials, $user);
 
     /**
      * create md5 param
