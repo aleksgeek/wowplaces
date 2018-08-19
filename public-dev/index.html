@@ -46,7 +46,7 @@
                     <li ng-controller="authCtrl as auth" ng-class="{ 'open': auth.openForm }"> 
                         <a href class="menu-a menu-a-auth pull-right" ng-click="auth.toggleForm()">
                             <span ng-if="!auth.isLogined">войти/регистрация</span>
-                            <span ng-if="auth.isLogined">{{auth.user_data.name}}</span>
+                            <span ng-if="auth.isLogined">{{auth.userData.name}}</span>
                             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                         </a>                 
                         <div class="auth-form" ng-if="!auth.isLogined && auth.openForm">
@@ -67,7 +67,7 @@
                         <div class="auth-form" ng-if="auth.isLogined && auth.openForm">
                             <form method="post" ng-submit="auth.logout()">
                                 <div>
-                                    {{auth.user_data.email}}
+                                    {{auth.userData.email}}
                                 </div>    
                                 <hr>
                                 <button type="submit" class="btn btn-success">выйти</button>

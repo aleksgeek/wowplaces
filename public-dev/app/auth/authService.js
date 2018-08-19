@@ -1,18 +1,8 @@
 app.service('authService', ['$q', '$http', 'config', function($q, $http, config){
-
-    function saveToken(token)
+	
+    function saveAuthUserFromToken(token)
     {
-        sessionStorage.setItem('token', token);
-    }
-
-    function getToken()
-    {
-        return sessionStorage.getItem('token');
-    }
-
-    function saveAuthUser()
-    {
-        var tokenArr = getToken().split('.');
+        var tokenArr = token.split('.');
         var dataObj  = atob(tokenArr[1]);
         sessionStorage.setItem('user_data', dataObj);
     }
@@ -35,8 +25,8 @@ app.service('authService', ['$q', '$http', 'config', function($q, $http, config)
             $http.post(config.api_url+'/authenticate', {email:email, password:password}).then(
             function(ok){
                 var token = ok.data;
-                saveToken(token);
-                saveAuthUser();
+                
+                saveAuthUserFromToken(token);
                 deferred.resolve(token);
             }, 
             function(error){
@@ -83,11 +73,7 @@ app.service('authService', ['$q', '$http', 'config', function($q, $http, config)
         },
         isLogined:function()
         {
-            return !!getToken();
-        },
-        getToken: function()
-        {
-            return getToken();
+            return !!getAuthUser();
         },
         getAuthUser: function()
         {

@@ -57,6 +57,8 @@ class AuthController extends Controller
             $user  = $this->userRepository->getByEmail($request->email, 1);
 			$token = $this->authLogic->getToken(['email'=>$request->email, 'password'=>$request->password], $user);
 			
+			setcookie("token", $token, 0, '/', '', 0, 1);
+			
 			return response()->json($token);
         }catch(AuthorizationException $e){
             return response()->json('invalid credentials', $e->getCode());
