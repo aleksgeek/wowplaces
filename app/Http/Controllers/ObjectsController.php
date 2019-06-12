@@ -24,8 +24,8 @@ class ObjectsController extends Controller
      */
     public function getObjects(Request $request)
     {
-        $places = $this->objectsRepository->getAllObjects();
-        return response()->json($places); 
+        $objects = $this->objectsRepository->getAllObjects();
+        return response()->json($objects); 
     }
 
     /**

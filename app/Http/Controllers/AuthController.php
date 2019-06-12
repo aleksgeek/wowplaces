@@ -52,19 +52,19 @@ class AuthController extends Controller
      * @throws ModelNotFoundException
      */
     public function authenticate(AuthAuthenticate $request)
-    {	        
+    {           
         try{
             $user  = $this->userRepository->getByEmail($request->email, 1);
-			$token = $this->authLogic->getToken(['email'=>$request->email, 'password'=>$request->password], $user);
-			
-			setcookie("token", $token, 0, '/', '', 0, 1);
-			
-			return response()->json($token);
+            $token = $this->authLogic->getToken(['email'=>$request->email, 'password'=>$request->password], $user);
+            
+            setcookie("token", $token, 0, '/', '', 0, 1);
+            
+            return response()->json($token);
         }catch(AuthorizationException $e){
             return response()->json('invalid credentials', $e->getCode());
         }catch(ModelNotFoundException $e){
-			return response()->json('bad enter data', $e->getCode());
-		}         
+            return response()->json('bad enter data', $e->getCode());
+        }         
     }
 
     /**
@@ -75,8 +75,11 @@ class AuthController extends Controller
      */
     public function register(AuthRegister $request)
     {
-        $user = $this->userRepository->save($request);
-        $approveParam = $this->authLogic->createApproveRegisterParam(['email'=>$user->email, 'password'=>$user->password]);
+        $user = $this->userRepository->createFromRequest($request);
+        $approveParam = $this->authLogic->createApproveRegisterParam([
+            'email' => $user->email, 
+            'password' => $user->password
+        ]);
         
         $this->cache->put('approve_param_'.$user->email, $approveParam, 60);
         
@@ -91,19 +94,19 @@ class AuthController extends Controller
      */
     public function sendRegisterApproveMail(Request $request)
     {
-        $recipient_email = $request->input('recipient_email'); 
-        $approveParam    = $this->cache->get('approve_param_'.$recipient_email);
-        $approveUrl      = route('register-approve', ['approve_param'=>$approveParam]); 
+        $recipientEmail = $request->input('recipient_email'); 
+        $approveParam   = $this->cache->get('approve_param_'.$recipientEmail);
+        $approveUrl     = route('register-approve', ['approve_param'=>$approveParam]); 
 
         $this->mailer->send('emails.register_approve', ['url'=>$approveUrl], function ($m) {
-            $m->to($recipient_email);
+            $m->to($recipientEmail);
         });
 
         if($this->mailer->failures()){
             return response()->json('register mail send error', 500);       
         }else{
             return response()->json('register mail was sent'); 
-        }          
+        }
     }
 
     /**

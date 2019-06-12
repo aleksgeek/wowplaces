@@ -10,7 +10,6 @@ import AddPlace from './components/add-place.vue';
 import 'vuelayers/lib/style.css'
 
 Vue.use(VueRouter);
-Vue.use(VueLayers);
 
 const router = new VueRouter({
   routes: [

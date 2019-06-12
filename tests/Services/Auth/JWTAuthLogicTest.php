@@ -8,32 +8,32 @@ use Illuminate\Auth\Access\AuthorizationException;
 
 class JWTAuthLogicTest extends TestCase
 {
-    protected $auth_logic;
-    protected $cache_mock;
-    protected $jwt_auth;
+    protected $authLogic;
+    protected $cacheMock;
+    protected $jwtAuth;
 
     public function setUp()
     {
-        $this->cache_mock = $this->getMockBuilder(Cache::class)
+        $this->cacheMock = $this->getMockBuilder(Cache::class)
         ->disableOriginalConstructor()
         ->getMock();
 
-        $this->jwt_auth = $this->getMockBuilder(JWTAuth::class)
+        $this->jwtAuth = $this->getMockBuilder(JWTAuth::class)
         ->disableOriginalConstructor()
         ->getMock();
 
-        $this->auth_logic = new JWTAuthLogic($this->cache_mock, $this->jwt_auth);
+        $this->authLogic = new JWTAuthLogic($this->cacheMock, $this->jwtAuth);
     }
 
     public function testGetToken()
     {
-        $this->jwt_auth->expects($this->any())
+        $this->jwtAuth->expects($this->any())
         ->method('attempt')
         ->will($this->returnValue(
             'token'
         ));
 
-        $token = $this->auth_logic->getToken(['email'=>'', 'password'=>''], ['test user']); 
+        $token = $this->authLogic->getToken(['email'=>'', 'password'=>''], ['test user']); 
         $this->assertEquals('token', $token);
     }
 
@@ -43,19 +43,19 @@ class JWTAuthLogicTest extends TestCase
      */
     public function testGetTokenException()
     {
-        $this->jwt_auth->expects($this->any())
+        $this->jwtAuth->expects($this->any())
         ->method('attempt')
         ->will($this->returnValue(
             ''
         ));
         
-        $this->auth_logic->getToken(['email'=>'', 'password'=>''], ['test user']); 
+        $this->authLogic->getToken(['email'=>'', 'password'=>''], ['test user']); 
     }
 
     public function testGetTokenError()
     {
         try{
-            $this->auth_logic->getToken('', ''); 
+            $this->authLogic->getToken('', ''); 
             $this->assertTrue(false);     
         }catch(Error $e){
             $this->assertEquals(0, $e->getCode());
@@ -64,14 +64,14 @@ class JWTAuthLogicTest extends TestCase
 
     public function testCreateApproveRegisterParam()
     {
-        $approve_param = $this->auth_logic->createApproveRegisterParam(['email'=>'', 'password'=>'']);
-        $this->assertInternalType('string', $approve_param);
+        $approveParam = $this->authLogic->createApproveRegisterParam(['email'=>'', 'password'=>'']);
+        $this->assertInternalType('string', $approveParam);
     }
 
     public function testCreateApproveRegisterParamError()
     {
         try{
-            $approve_param = $this->auth_logic->createApproveRegisterParam('');  
+            $approveParam = $this->authLogic->createApproveRegisterParam('');  
             $this->assertTrue(false);     
         }catch(Error $e){
             $this->assertEquals(0, $e->getCode());
@@ -80,13 +80,13 @@ class JWTAuthLogicTest extends TestCase
 
     public function testGetApproveRegisterCredentials()
     {
-        $this->cache_mock->expects($this->any())
+        $this->cacheMock->expects($this->any())
         ->method('get')
         ->will($this->returnValue(
             '{"email":"", "password":""}'
         ));
 
-        $credentails = $this->auth_logic->getApproveRegisterCredentials('somestring');
+        $credentails = $this->authLogic->getApproveRegisterCredentials('somestring');
         $this->assertEquals(['email'=>'', 'password'=>''], $credentails);
     }
 
@@ -96,25 +96,25 @@ class JWTAuthLogicTest extends TestCase
      */
     public function testGetApproveRegisterCredentialsException()
     {
-        $this->cache_mock->expects($this->any())
+        $this->cacheMock->expects($this->any())
         ->method('get')
         ->will($this->returnValue(
             ''
         ));
 
-        $credentails = $this->auth_logic->getApproveRegisterCredentials('somestring');
+        $credentails = $this->authLogic->getApproveRegisterCredentials('somestring');
     }
 
     public function testGetApproveRegisterCredentialsError()
     {
-        $this->cache_mock->expects($this->any())
+        $this->cacheMock->expects($this->any())
         ->method('get')
         ->will($this->returnValue(
             'test'
         ));
         
         try{ 
-            $credentails = $this->auth_logic->getApproveRegisterCredentials('somestring');
+            $credentails = $this->authLogic->getApproveRegisterCredentials('somestring');
             ///$this->assertTrue(false);
         }catch(Error $e){
             $this->assertEquals(0, $e->getCode());
@@ -123,9 +123,9 @@ class JWTAuthLogicTest extends TestCase
 
     public function testGetAuthenticatedUser()
     {
-        $test_user = (object)['id'=>0, 'name'=>'test'];
+        $testUser = (object)['id'=>0, 'name'=>'test'];
 
-        $this->jwt_auth->expects($this->any())
+        $this->jwtAuth->expects($this->any())
         ->method('parseToken')
         ->will($this->returnValue(
             new class{
@@ -136,8 +136,8 @@ class JWTAuthLogicTest extends TestCase
             } 
         ));
 
-        $user = $this->auth_logic->getAuthenticatedUser();
-        $this->assertEquals($user, $test_user);
+        $user = $this->authLogic->getAuthenticatedUser();
+        $this->assertEquals($user, $testUser);
     }
 
     /**
@@ -146,7 +146,7 @@ class JWTAuthLogicTest extends TestCase
      */
     public function testGetAuthenticatedUserException()
     {
-        $this->jwt_auth->expects($this->any())
+        $this->jwtAuth->expects($this->any())
         ->method('parseToken')
         ->will($this->returnValue(
             new class{
@@ -157,6 +157,6 @@ class JWTAuthLogicTest extends TestCase
             } 
         ));
 
-        $this->auth_logic->getAuthenticatedUser();
+        $this->authLogic->getAuthenticatedUser();
     }
 }

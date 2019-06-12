@@ -1,42 +1,51 @@
 <template>
-  <div class="main-content">
-    <vl-map :load-tiles-while-animating="true" :load-tiles-while-interacting="true" v-bind:style="{ width: width + 'px', height: height + 'px' }">
-      <vl-view :zoom.sync="zoom" :center.sync="center" :rotation.sync="rotation"></vl-view>
-
-        <vl-layer-tile id="osm">
-            <vl-source-osm></vl-source-osm>
-        </vl-layer-tile>
-
-        <vl-feature :properties="{prop: 'value', prop2: 'value'}">
-            <vl-geom-point :coordinates="[0, 0]"></vl-geom-point>
-        </vl-feature>
-    </vl-map>
-  </div>
+  <my-map :zoom="zoom" :center="center" :width="width" :height="height">
+    <div v-for="marker in markersData">
+      <my-marker :marker-data="marker"></my-marker>
+    </div>
+  </my-map>
 </template>
 
 <script>
-  export default {
-    mounted() {
-      this.setMap();
-    },
+  import MyMap from './openlayer/my-map.vue'
+  import MyMarker from './openlayer/my-marker.vue'
+  import MapService from '../services/MapService.js';
 
+  export default {
+    created: function() {
+      this.setMapSize();
+    },
+    mounted: function () {
+      this.fetchMarkers();
+    },    
     data () {
       return { 
-        zoom: 2,
-        center: [0, 0],
-        rotation: 0,
-        geolocPosition: undefined,
+        zoom: 4,
+        center: [55, 40],
         width: window.innerWidth,
-        height: 0
+        height: window.innerHeight,
+        markersData: []
       }
     },
 
     methods: {
-      setMap() {
-        /// TODO
-        var mapElement = document.getElementById('map');
-        this.height = window.innerHeight - 30;                   
+      setMapSize() {
+        this.height = this.height - MapService.topIndent;
+      },
+      fetchMarkers() {
+        var self = this;
+
+        MapService.getAllObjects().then(function (response) {
+          self.markersData = response.data;
+        }).catch(function (error) {
+          console.log(error);
+        });    
       }
+    },
+
+    components: {
+      MyMap,
+      MyMarker
     }
   }
 </script>

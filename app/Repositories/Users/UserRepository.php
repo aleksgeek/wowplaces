@@ -13,7 +13,7 @@ class UserRepository
      * @param App\Http\Requests\AuthRegister $request
      * @return object
      */
-    public function save($request)
+    public function createFromRequest($request)
     {
         $user = new Users();
         $user->name = $request['name'];
