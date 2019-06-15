@@ -11,6 +11,7 @@ class JWTAuthLogicTest extends TestCase
     protected $authLogic;
     protected $cacheMock;
     protected $jwtAuth;
+    protected $testUser;
 
     public function setUp()
     {
@@ -23,6 +24,7 @@ class JWTAuthLogicTest extends TestCase
         ->getMock();
 
         $this->authLogic = new JWTAuthLogic($this->cacheMock, $this->jwtAuth);
+        $this->testUser  = (object)['email'=>'email', 'name'=>'name'];
     }
 
     public function testGetToken()
@@ -33,7 +35,7 @@ class JWTAuthLogicTest extends TestCase
             'token'
         ));
 
-        $token = $this->authLogic->getToken(['email'=>'', 'password'=>''], ['test user']); 
+        $token = $this->authLogic->getToken(['email'=>'', 'password'=>''], $this->testUser); 
         $this->assertEquals('token', $token);
     }
 
@@ -48,18 +50,8 @@ class JWTAuthLogicTest extends TestCase
         ->will($this->returnValue(
             ''
         ));
-        
-        $this->authLogic->getToken(['email'=>'', 'password'=>''], ['test user']); 
-    }
 
-    public function testGetTokenError()
-    {
-        try{
-            $this->authLogic->getToken('', ''); 
-            $this->assertTrue(false);     
-        }catch(Error $e){
-            $this->assertEquals(0, $e->getCode());
-        }
+        $this->authLogic->getToken(['email'=>'', 'password'=>''], $this->testUser); 
     }
 
     public function testCreateApproveRegisterParam()
@@ -115,7 +107,7 @@ class JWTAuthLogicTest extends TestCase
         
         try{ 
             $credentails = $this->authLogic->getApproveRegisterCredentials('somestring');
-            ///$this->assertTrue(false);
+            $this->assertEquals(null, $credentails);
         }catch(Error $e){
             $this->assertEquals(0, $e->getCode());
         }
