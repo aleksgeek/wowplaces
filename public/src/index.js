@@ -13,6 +13,7 @@ Vue.use(VueRouter);
 
 const router = new VueRouter({
   routes: [
+  	{ path: '/', component: PlacesMap },
     { path: '/add-place', component: AddPlace },
     { path: '/places-map', component: PlacesMap },
     { path: '/tourist-guide', component: TouristGuide },

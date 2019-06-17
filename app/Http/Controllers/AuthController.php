@@ -11,6 +11,7 @@ use App\Repositories\Users\UserRepository;
 use App\Services\Auth\AuthLogic;
 use Illuminate\Mail\Mailer;
 use Illuminate\Cache\CacheManager;
+use Lang;
 
 class AuthController extends Controller
 {
@@ -52,7 +53,7 @@ class AuthController extends Controller
      * @throws ModelNotFoundException
      */
     public function authenticate(AuthAuthenticate $request)
-    {           
+    {
         try{
             $user  = $this->userRepository->getByEmail($request->email, 1);
             $token = $this->authLogic->getToken(['email'=>$request->email, 'password'=>$request->password], $user);
@@ -61,9 +62,9 @@ class AuthController extends Controller
             
             return response()->json($token);
         }catch(AuthorizationException $e){
-            return response()->json('invalid credentials', $e->getCode());
+            return response()->json(Lang::get('messages.error.invalid_credentials'), $e->getCode());
         }catch(ModelNotFoundException $e){
-            return response()->json('bad enter data', $e->getCode());
+            return response()->json(Lang::get('messages.error.default_error'), $e->getCode());
         }         
     }
 
@@ -81,9 +82,9 @@ class AuthController extends Controller
             'password' => $user->password
         ]);
         
-        $this->cache->put('approve_param_'.$user->email, $approveParam, 60);
+        $this->cache->put('approve_param_'.$user->email, $approveParam, 300);
         
-        return response()->json('user was successfuly created');
+        return response()->json($user);
     }
 
     /**
@@ -96,9 +97,13 @@ class AuthController extends Controller
     {
         $recipientEmail = $request->input('recipient_email'); 
         $approveParam   = $this->cache->get('approve_param_'.$recipientEmail);
-        $approveUrl     = route('register-approve', ['approve_param'=>$approveParam]); 
+        $approveUrl     = route('register-approve', ['approve_param'=>$approveParam]);
 
-        $this->mailer->send('emails.register_approve', ['url'=>$approveUrl], function ($m) {
+        /// TODO change this on mail functionality
+        return response()->json($approveUrl);
+        
+        /*
+        $this->mailer->send('emails.register-approve', ['url'=>$approveUrl], function ($m) {
             $m->to($recipientEmail);
         });
 
@@ -107,6 +112,7 @@ class AuthController extends Controller
         }else{
             return response()->json('register mail was sent'); 
         }
+        */
     }
 
     /**

@@ -1,14 +1,15 @@
 <template>
+  <div class="top-menu">
     <nav class="navbar navbar-fixed-top" role="navigation">
-        <div class="container">
+        <div>
             <div class="navbar-header">
                 <a href="#" class="navbar-brand"> 
                     <img src="img/logo.png"> 
                 </a>
 
                 <ul class="nav pull-left visible-xs">
-                    <li v-bind:class="{ open: isMenuOpen }">
-                        <a href="#" class="menu-a" v-on:click="toggleMenu()">
+                    <li :class="{ open: isMenuOpened }">
+                        <a href="#" class="menu-a" @click="toggleMenu()">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </a>
                     </li>
@@ -22,41 +23,38 @@
                     </ul>
                 </div>
                 
-                <ul class="nav pull-right">
-                    <li v-bind:class="{ open: openForm }">
-                        <a href="#" class="menu-a menu-a-auth pull-right" v-on:click="toggleAuthForm()">
+                <ul class="nav pull-right auth-block">
+                    <li :class="{ open: isAuthFormOpened }">
+                        <a href="#" class="menu-a menu-a-auth pull-right" @click="toggleAuthForm()">
                             <span v-if="!isLogined">войти/регистрация</span>
-                            <span v-if="isLogined">{{auth.userData.name}}</span>
+                            <span v-if="isLogined">{{userData.name}}</span>
                             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                         </a>
-                        <div class="auth-form" v-if="!isLogined && openForm">
+                        <div class="auth-form" v-if="!isLogined && isAuthFormOpened">
                             <form method="post" @submit.prevent="authenticate()">
                                 <div class="form-group">
                                     <label for="email">Ваш email</label>
-                                    <input class="form-control" type="email" name="email" v-model="auth.email" required>
+                                    <input class="form-control" type="email" name="email" v-model="formData.email" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Ваш пароль</label>
-                                    <input class="form-control" type="password" name="password" v-model="auth.password" required>
+                                    <input class="form-control" type="password" name="password" v-model="formData.password" required>
                                 </div>
-                                <div class="error" v-if="loginError">некорректный логин или пароль</div>
-                                <button type="submit" class="btn btn-success btn-sm">войти</button>
-
-                                <router-link to="/registration" class="btn btn-primary btn-sm" v-on:click="toggleAuthForm()">регистрация</router-link>
+                                <show-errors :errors="errors"></show-errors>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isEnterBtnDisabled">войти</button>
+                                <router-link to="/registration" class="btn btn-primary btn-sm" @click="toggleAuthForm()">регистрация</router-link>
                             </form>
                         </div> 
-                        <div class="auth-form" v-if="isLogined && openForm">
-                          <div>
-                            {{ auth.userData.email }}
-                          </div>    
+                        <div class="auth-form" v-if="isLogined && isAuthFormOpened">
+                          <div> <b>Email:</b>{{ userData.email }} </div>    
                           <hr>
-                          <button type="button" class="btn btn-success" v-on:click="logout()">выйти</button>
+                          <button type="button" class="btn btn-success" @click="logout()">выйти</button>
                         </div>                                                                  
                     </li>
                 </ul>
                           
-            </div> 
-            <div v-if="isMenuOpen" class="mobile-menu visible-xs" v-on:click="toggleMenu()">
+            </div>
+            <div v-if="isMenuOpened" class="mobile-menu visible-xs" @click="toggleMenu()">
                 <ul class="nav navbar-nav">
                   <li><router-link to="/add-place" class="menu-a">добавить</router-link></li>
                   <li><router-link to="/places-map" class="menu-a">карта</router-link></li>
@@ -65,53 +63,77 @@
             </div>
         </div>
     </nav>
+  </div>  
 </template>
 
 <script>
-    import axios from 'axios';
-    import AuthService from '../services/AuthService.js';
+  import AuthService from '../services/AuthService.js';
+  import ShowErrors from './common/show-errors.vue'
 
     export default {
+      mounted() {
+        var self = this;
+
+        document.addEventListener('click', function (e) {
+          ///console.log(e);
+          if(self.isAuthFormOpened){
+            ///self.toggleAuthForm();  
+          }
+          
+          if(self.isMenuOpened){
+            ///self.toggleMenu();  
+          }          
+        });
+      },
       data () {
         return {
-          isMenuOpen: false,
-          openForm: false,
+          isMenuOpened: false,
+          isAuthFormOpened: false,
           isLogined: false,
-          loginError: false,
-          auth:{
-            email: '',
-            password: '',
-            userData: ''
-          }
+          isEnterBtnDisabled: false,
+          errors: [],
+          formData:{
+            email: null,
+            password: null,
+          },
+          userData: null,
         }
       },
       methods: {
         toggleMenu: function(){
-          this.isMenuOpen = !this.isMenuOpen;
+          this.isMenuOpened = !this.isMenuOpened;
         },
         toggleAuthForm: function(){
-          this.openForm = !this.openForm;
+          this.isAuthFormOpened = !this.isAuthFormOpened;
         },
         authenticate: function(){
-          var self = this;
+          let self = this;
+          self.errors = [];
+          self.isEnterBtnDisabled = true;
 
-            axios.post(process.env.API_URL+'/authenticate', {
-                email: self.auth.email, 
-                password: self.auth.password
-            }).then(function (response) {
-              AuthService.saveUserDataFromResponse(response);
+          AuthService.authenticate(self.formData).then(function (response) {
+            AuthService.saveUserDataFromResponse(response);
+            
+            self.isLogined = AuthService.isLogined();  
+            self.userData  = AuthService.getAuthUser();
+            self.isAuthFormOpened = false;
+          }).catch(function (err) {
+            let errors = err.response.data;
 
-              self.isLogined = AuthService.isLogined();  
-              self.auth.userData = AuthService.getAuthUser();
-              self.toggleAuthForm();
-            }).catch(function (error) {
-              console.log(error);
-            });
+            if(typeof errors === 'string'){
+              self.errors.push(errors);
+            }
+
+            self.isEnterBtnDisabled = false;
+          });
         },
         logout: function(){
           AuthService.logout();
           window.location.reload();
         }
+      },
+      components: {
+        ShowErrors
       }
     }
 </script>

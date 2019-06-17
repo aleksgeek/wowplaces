@@ -12,18 +12,18 @@
 
 
 Route::group(['middleware'=>'throttle'], function () { 
-	Route::get('/objects', ['uses'=>'ObjectsController@getObjects', 'as'=>'get-objects']);
-	Route::get('/objects/{id_object}', ['uses'=>'ObjectsController@getObjectById', 'as'=>'get-object']);
+    Route::get('/objects', ['uses'=>'ObjectsController@getObjects', 'as'=>'get-objects']);
+    Route::get('/objects/{id_object}', ['uses'=>'ObjectsController@getObjectById', 'as'=>'get-object']);
 
-	// auth
-	Route::post('/authenticate', ['uses'=>'AuthController@authenticate', 'as'=>'post-auth']);
-	Route::any('/register', ['uses'=>'AuthController@register', 'as'=>'post-register']);
-	Route::post('/register/mail', ['uses'=>'AuthController@sendRegisterApproveMail']);
-	Route::get('/register/approve/{approve_param}', ['uses'=>'AuthController@registerApprove', 'as'=>'register-approve']);
+    // auth
+    Route::post('/authenticate', ['uses'=>'AuthController@authenticate', 'as'=>'post-auth']);
+    Route::any('/register', ['uses'=>'AuthController@register', 'as'=>'post-register']);
+    Route::post('/register/mail', ['uses'=>'AuthController@sendRegisterApproveMail']);
+    Route::get('/register/approve/{approve_param}', ['uses'=>'AuthController@registerApprove', 'as'=>'register-approve']);
 
-	Route::group(['middleware'=>['jwt.auth']], function () { 		
-		Route::post('/vote', ['uses'=>'VoteController@makeVoting', 'as'=>'post-vote']);	
-	});
+    Route::group(['middleware'=>['jwt.auth']], function () {        
+        Route::post('/vote', ['uses'=>'VoteController@makeVoting', 'as'=>'post-vote']); 
+    });
 });
 
 

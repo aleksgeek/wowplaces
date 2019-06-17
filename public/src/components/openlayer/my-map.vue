@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content">
+  <div>
     <div id="map" class="map" :style="{width: width+'px', height:height+'px'}"><slot></slot></div>
   </div>
 </template>

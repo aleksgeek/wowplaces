@@ -1,7 +1,3 @@
-nav .container{
-    min-height: 30px;
-    height:30px;
-}
 nav.navbar{
     margin:0;
     border-bottom: 1px solid #999999;
@@ -40,9 +36,8 @@ nav.navbar .auth-form{
     border-right: 1px solid #000000;
     background: #ffffff;
     padding: 3px;
-    position: absolute;
+    position: relative;
     top:30px;
-    z-index: 2;
 }
 nav.navbar .mobile-menu{
     background: #ffffff;
@@ -56,9 +51,8 @@ nav.navbar .mobile-menu ul{
 nav.navbar .mobile-menu a:hover{
     background: #eeeeee;
 }
-
-.main-content{
-    margin-top: 30px;
+nav .auth-block{
+    padding-right: 15px; 
 }
 
 .marker-context{
@@ -81,33 +75,9 @@ nav.navbar .mobile-menu a:hover{
 .marker-context .more-btn{
     color:blue;
 }
-
 .marker-info i{
     cursor:pointer;
 }
-
-.container-fluid{
-    padding: 0;
-    position: relative;
-}
-.info-header{
-    font-weight: bold;
-    font-size: 16px;
-    text-align: center;
-}
-.info-body{
-    font-size: 14px;
-    line-height: 20px;
-}
-
-.top-10{
-    padding-top: 10%
-}
-
-a, a:hover{
-    color:#000000;
-}
-
 .marker-info{
     padding: 10px;
     width: 480px;
@@ -127,6 +97,34 @@ a, a:hover{
     font-weight: bold;
     border-bottom: 1px solid #eee;
 }
+
+.container-fluid{
+    padding: 0;
+    position: relative;
+}
+.container{
+    padding-top: 30px;
+}
+
+.info-header{
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+.info-body{
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.top-menu{
+    height: 30px;
+}
+
+a, a:hover{
+    color:#000000;
+}
+
+
 .info-show{
     color:red;
 }
