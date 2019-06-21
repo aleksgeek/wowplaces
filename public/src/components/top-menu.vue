@@ -8,7 +8,7 @@
                 </a>
 
                 <ul class="nav pull-left visible-xs">
-                    <li :class="{ open: isMenuOpened }">
+                    <li :class="{ open: isMenuOpened }" ref="closable-menu">
                         <a href="#" class="menu-a" @click="toggleMenu()">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </a>
@@ -24,7 +24,7 @@
                 </div>
                 
                 <ul class="nav pull-right auth-block">
-                    <li :class="{ open: isAuthFormOpened }">
+                    <li :class="{ open: isAuthFormOpened }" ref="closable-auth">
                         <a href="#" class="menu-a menu-a-auth pull-right" @click="toggleAuthForm()">
                             <span v-if="!isLogined">войти/регистрация</span>
                             <span v-if="isLogined">{{userData.name}}</span>
@@ -72,17 +72,22 @@
 
     export default {
       mounted() {
-        var self = this;
+        let self = this;
 
-        document.addEventListener('click', function (e) {
-          ///console.log(e);
-          if(self.isAuthFormOpened){
-            ///self.toggleAuthForm();  
-          }
-          
-          if(self.isMenuOpened){
-            ///self.toggleMenu();  
-          }          
+        document.addEventListener('click', function(e){
+          e.stopPropagation();
+
+          let isClickedOnMenuEl = self.$refs['closable-menu'].contains(e.target);
+          let isClickedOnAuthEl = self.$refs['closable-auth'].contains(e.target);
+
+          if(!isClickedOnMenuEl && !isClickedOnAuthEl){
+            self.isAuthFormOpened = false;
+            self.isMenuOpened = false;
+          } else if(isClickedOnMenuEl){
+            self.isAuthFormOpened = false;
+          } else if(isClickedOnAuthEl){
+            self.isMenuOpened = false;
+          }         
         });
       },
       data () {

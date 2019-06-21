@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div id="map" class="map" :style="{width: width+'px', height:height+'px'}"><slot></slot></div>
-  </div>
+    <div id="map" class="map" :style="{width: width+'px', height:height+'px'}">
+      <slot></slot>
+    </div>
+  </div>  
 </template>
 
 <script>
@@ -14,9 +16,10 @@
   export default {
     provide: function () {
       return {
-        getVectorLayer: this.getVectorLayer
+        getMapElements: this.getMapElements
       }
-    },    
+    },
+
     mounted() {
       this.generateMap();
     },
@@ -44,22 +47,23 @@
 
     data () {
       return {
-        vectorLayer:null
+        vectorLayer:null,
+        map:null
       }
     },
 
     methods: {
-      getVectorLayer: function (foundLayer) {
+      getMapElements: function (element, foundElement) {
         var self = this;
 
-        function checkForLayer() {
-          if (self.vectorLayer) {
-            foundLayer(self.vectorLayer)
+        function checkForElement() {
+          if (self[element]) {
+            foundElement(self[element])
           } else {
-            setTimeout(checkForLayer, 100);
+            setTimeout(checkForElement, 100);
           }
         }
-        checkForLayer();
+        checkForElement();
       },
       generateMap() {
         var self = this;
@@ -72,7 +76,7 @@
           source: vectorSource
         });
 
-        new Map({
+        self.map = new Map({
           target: 'map',
           layers: [
             new ol.layer.Tile({
@@ -82,11 +86,11 @@
           ],
           view: new ol.View({
             center: ol.proj.fromLonLat(self.center),
-            zoom: self.zoom
+            zoom: self.zoom,
+            minZoom: 2,
           })
         });
-
       }
-    }   
+    }      
   }
 </script>

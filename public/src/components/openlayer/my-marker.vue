@@ -6,15 +6,17 @@
   import Point from 'ol/geom/Point.js';  
   import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
   import {Icon, Style} from 'ol/style.js';
+  import Overlay from 'ol/Overlay.js';
 
   export default {
-    inject: ['getVectorLayer'],   
+    inject: ['getMapElements'],
+    
     mounted: function () {
-      var vm = this;
+      var self = this;
 
-      this.getVectorLayer(function (vectorLayer) {
-        vm.setMarker(vectorLayer);
-      })
+      self.getMapElements('vectorLayer', function (vectorLayer) {
+        self.setMarker(vectorLayer);
+      });
     },
 
     props: {
@@ -31,6 +33,7 @@
 
     data () {
       return {
+        markerHeight:30
       }
     },
 
@@ -41,7 +44,13 @@
 
         var iconFeature = new Feature({
           geometry: new Point(ol.proj.transform([parseFloat(self.markerData.longitude), parseFloat(self.markerData.latitude)], 'EPSG:4326', 'EPSG:3857')),
-          name: self.markerData.title,
+          id: self.markerData.id,
+          title: self.markerData.title,
+          brief_description: self.markerData.brief_description,
+          description: self.markerData.description, 
+          rating_good: self.markerData.rating_good, 
+          rating_bad: self.markerData.rating_bad,
+          height: self.markerHeight
         });
         
         if('default' == self.iconStyle){
@@ -52,9 +61,9 @@
         vectorLayer.getSource().addFeature(iconFeature);
       },
       getDefaultIconStyle(){
-        var iconStyle = new Style({
+        let iconStyle = new Style({
           image: new  Icon(({
-            anchor: [0.5, 30],
+            anchor: [0.5, this.markerHeight],
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.75,

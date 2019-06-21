@@ -6,10 +6,12 @@ import Registration from './components/registration.vue';
 import TouristGuide from './components/tourist-guide.vue';
 import PlacesMap from './components/places-map.vue';
 import AddPlace from './components/add-place.vue';
+import Forms from './plugins/forms';
 
 import 'vuelayers/lib/style.css'
 
 Vue.use(VueRouter);
+Vue.use(Forms);
 
 const router = new VueRouter({
   routes: [
