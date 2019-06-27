@@ -13,7 +13,7 @@ class JWTAuthLogicTest extends TestCase
     protected $jwtAuth;
     protected $testUser;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cacheMock = $this->getMockBuilder(Cache::class)
         ->disableOriginalConstructor()

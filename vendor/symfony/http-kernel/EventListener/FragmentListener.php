@@ -28,6 +28,8 @@ use Symfony\Component\HttpKernel\UriSigner;
  * is not signed or if it is not an internal sub-request.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @final since Symfony 4.3
  */
 class FragmentListener implements EventSubscriberInterface
 {
@@ -38,7 +40,7 @@ class FragmentListener implements EventSubscriberInterface
      * @param UriSigner $signer       A UriSigner instance
      * @param string    $fragmentPath The path that triggers this listener
      */
-    public function __construct(UriSigner $signer, $fragmentPath = '/_fragment')
+    public function __construct(UriSigner $signer, string $fragmentPath = '/_fragment')
     {
         $this->signer = $signer;
         $this->fragmentPath = $fragmentPath;

@@ -229,17 +229,17 @@ class EsiTest extends TestCase
         $cache = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpCache\HttpCache')->setMethods(['getRequest', 'handle'])->disableOriginalConstructor()->getMock();
         $cache->expects($this->any())
               ->method('getRequest')
-              ->will($this->returnValue($request))
+              ->willReturn($request)
         ;
         if (\is_array($response)) {
             $cache->expects($this->any())
                   ->method('handle')
-                  ->will(\call_user_func_array([$this, 'onConsecutiveCalls'], $response))
+                  ->will($this->onConsecutiveCalls(...$response))
             ;
         } else {
             $cache->expects($this->any())
                   ->method('handle')
-                  ->will($this->returnValue($response))
+                  ->willReturn($response)
             ;
         }
 

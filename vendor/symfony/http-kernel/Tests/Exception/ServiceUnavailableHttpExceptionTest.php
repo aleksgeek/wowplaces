@@ -12,6 +12,19 @@ class ServiceUnavailableHttpExceptionTest extends HttpExceptionTest
         $this->assertSame(['Retry-After' => 10], $exception->getHeaders());
     }
 
+    public function testWithHeaderConstruct()
+    {
+        $headers = [
+            'Cache-Control' => 'public, s-maxage=1337',
+        ];
+
+        $exception = new ServiceUnavailableHttpException(1337, null, null, null, $headers);
+
+        $headers['Retry-After'] = 1337;
+
+        $this->assertSame($headers, $exception->getHeaders());
+    }
+
     /**
      * @dataProvider headerDataProvider
      */
@@ -22,8 +35,8 @@ class ServiceUnavailableHttpExceptionTest extends HttpExceptionTest
         $this->assertSame($headers, $exception->getHeaders());
     }
 
-    protected function createException()
+    protected function createException(string $message = null, \Throwable $previous = null, ?int $code = 0, array $headers = [])
     {
-        return new ServiceUnavailableHttpException();
+        return new ServiceUnavailableHttpException(null, $message, $previous, $code, $headers);
     }
 }

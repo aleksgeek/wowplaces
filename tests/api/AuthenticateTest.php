@@ -6,7 +6,7 @@ class AuthenticateTest extends TestCase
 {
     private $guzzleClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setup();
         $this->guzzleClient = new Client();

@@ -79,6 +79,13 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
             $responseCookies[$cookie->getName()] = $cookie;
         }
 
+        $dotenvVars = [];
+        foreach (explode(',', getenv('SYMFONY_DOTENV_VARS')) as $name) {
+            if ('' !== $name && false !== $value = getenv($name)) {
+                $dotenvVars[$name] = $value;
+            }
+        }
+
         $this->data = [
             'method' => $request->getMethod(),
             'format' => $request->getRequestFormat(),
@@ -88,6 +95,7 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
             'status_code' => $statusCode,
             'request_query' => $request->query->all(),
             'request_request' => $request->request->all(),
+            'request_files' => $request->files->all(),
             'request_headers' => $request->headers->all(),
             'request_server' => $request->server->all(),
             'request_cookies' => $request->cookies->all(),
@@ -101,6 +109,7 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
             'path_info' => $request->getPathInfo(),
             'controller' => 'n/a',
             'locale' => $request->getLocale(),
+            'dotenv_vars' => $dotenvVars,
         ];
 
         if (isset($this->data['request_headers']['php-auth-pw'])) {
@@ -145,11 +154,16 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
                     'controller' => $this->parseController($request->attributes->get('_controller')),
                     'status_code' => $statusCode,
                     'status_text' => Response::$statusTexts[(int) $statusCode],
-                ])
+                ]),
+                0, '/', null, $request->isSecure(), true, false, 'lax'
             ));
         }
 
         $this->data['identifier'] = $this->data['route'] ?: (\is_array($this->data['controller']) ? $this->data['controller']['class'].'::'.$this->data['controller']['method'].'()' : $this->data['controller']);
+
+        if ($response->headers->has('x-previous-debug-token')) {
+            $this->data['forward_token'] = $response->headers->get('x-previous-debug-token');
+        }
     }
 
     public function lateCollect()
@@ -181,6 +195,11 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
     public function getRequestQuery()
     {
         return new ParameterBag($this->data['request_query']->getValue());
+    }
+
+    public function getRequestFiles()
+    {
+        return new ParameterBag($this->data['request_files']->getValue());
     }
 
     public function getRequestHeaders()
@@ -233,6 +252,18 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
         return $this->data['content'];
     }
 
+    public function isJsonRequest()
+    {
+        return 1 === preg_match('{^application/(?:\w+\++)*json$}i', $this->data['request_headers']['content-type']);
+    }
+
+    public function getPrettyJson()
+    {
+        $decoded = json_decode($this->getContent());
+
+        return JSON_ERROR_NONE === json_last_error() ? json_encode($decoded, JSON_PRETTY_PRINT) : null;
+    }
+
     public function getContentType()
     {
         return $this->data['content_type'];
@@ -256,6 +287,11 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
     public function getLocale()
     {
         return $this->data['locale'];
+    }
+
+    public function getDotenvVars()
+    {
+        return new ParameterBag($this->data['dotenv_vars']->getValue());
     }
 
     /**
@@ -309,11 +345,22 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
         return isset($this->data['redirect']) ? $this->data['redirect'] : false;
     }
 
+    public function getForwardToken()
+    {
+        return isset($this->data['forward_token']) ? $this->data['forward_token'] : null;
+    }
+
+    /**
+     * @final since Symfony 4.3
+     */
     public function onKernelController(FilterControllerEvent $event)
     {
         $this->controllers[$event->getRequest()] = $event->getController();
     }
 
+    /**
+     * @final since Symfony 4.3
+     */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {

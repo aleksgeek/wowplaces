@@ -13,7 +13,10 @@ namespace Symfony\Component\Routing\Tests\Loader;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Loader\XmlFileLoader;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Tests\Fixtures\CustomXmlFileLoader;
 
 class XmlFileLoaderTest extends TestCase
@@ -83,24 +86,118 @@ class XmlFileLoaderTest extends TestCase
         }
     }
 
-    public function testUtf8Route()
+    public function testLoadingRouteWithDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $routes = $loader->load('defaults.xml');
+
+        $this->assertCount(1, $routes);
+
+        $defaultsRoute = $routes->get('defaults');
+
+        $this->assertSame('/defaults', $defaultsRoute->getPath());
+        $this->assertSame('en', $defaultsRoute->getDefault('_locale'));
+        $this->assertSame('html', $defaultsRoute->getDefault('_format'));
+    }
+
+    public function testLoadingImportedRoutesWithDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $routes = $loader->load('importer-with-defaults.xml');
+
+        $this->assertCount(2, $routes);
+
+        $expectedRoutes = new RouteCollection();
+        $expectedRoutes->add('one', $localeRoute = new Route('/defaults/one'));
+        $localeRoute->setDefault('_locale', 'g_locale');
+        $localeRoute->setDefault('_format', 'g_format');
+        $expectedRoutes->add('two', $formatRoute = new Route('/defaults/two'));
+        $formatRoute->setDefault('_locale', 'g_locale');
+        $formatRoute->setDefault('_format', 'g_format');
+        $formatRoute->setDefault('specific', 'imported');
+
+        $expectedRoutes->addResource(new FileResource(__DIR__.'/../Fixtures/imported-with-defaults.xml'));
+        $expectedRoutes->addResource(new FileResource(__DIR__.'/../Fixtures/importer-with-defaults.xml'));
+
+        $this->assertEquals($expectedRoutes, $routes);
+    }
+
+    public function testLoadingUtf8Route()
     {
         $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/localized']));
-        $routeCollection = $loader->load('utf8.xml');
+        $routes = $loader->load('utf8.xml');
+
+        $this->assertCount(2, $routes);
+
+        $expectedRoutes = new RouteCollection();
+        $expectedRoutes->add('app_utf8', $route = new Route('/utf8'));
+        $route->setOption('utf8', true);
+
+        $expectedRoutes->add('app_no_utf8', $route = new Route('/no-utf8'));
+        $route->setOption('utf8', false);
+
+        $expectedRoutes->addResource(new FileResource(__DIR__.'/../Fixtures/localized/utf8.xml'));
+
+        $this->assertEquals($expectedRoutes, $routes);
+    }
+
+    public function testLoadingUtf8ImportedRoutes()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/localized']));
+        $routes = $loader->load('importer-with-utf8.xml');
+
+        $this->assertCount(2, $routes);
+
+        $expectedRoutes = new RouteCollection();
+        $expectedRoutes->add('utf8_one', $one = new Route('/one'));
+        $one->setOption('utf8', true);
+
+        $expectedRoutes->add('utf8_two', $two = new Route('/two'));
+        $two->setOption('utf8', true);
+
+        $expectedRoutes->addResource(new FileResource(__DIR__.'/../Fixtures/localized/imported-with-utf8.xml'));
+        $expectedRoutes->addResource(new FileResource(__DIR__.'/../Fixtures/localized/importer-with-utf8.xml'));
+
+        $this->assertEquals($expectedRoutes, $routes);
+    }
+
+    public function testLoadLocalized()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $routeCollection = $loader->load('localized.xml');
         $routes = $routeCollection->all();
 
         $this->assertCount(2, $routes, 'Two routes are loaded');
         $this->assertContainsOnly('Symfony\Component\Routing\Route', $routes);
 
-        $utf8Route = $routeCollection->get('app_utf8');
+        $this->assertEquals('/route', $routeCollection->get('localized.fr')->getPath());
+        $this->assertEquals('/path', $routeCollection->get('localized.en')->getPath());
+    }
 
-        $this->assertSame('/utf8', $utf8Route->getPath());
-        $this->assertTrue($utf8Route->getOption('utf8'), 'Must be utf8');
+    public function testLocalizedImports()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/localized']));
+        $routeCollection = $loader->load('importer-with-locale.xml');
+        $routes = $routeCollection->all();
 
-        $noUtf8Route = $routeCollection->get('app_no_utf8');
+        $this->assertCount(2, $routes, 'Two routes are loaded');
+        $this->assertContainsOnly('Symfony\Component\Routing\Route', $routes);
 
-        $this->assertSame('/no-utf8', $noUtf8Route->getPath());
-        $this->assertFalse($noUtf8Route->getOption('utf8'), 'Must not be utf8');
+        $this->assertEquals('/le-prefix/le-suffix', $routeCollection->get('imported.fr')->getPath());
+        $this->assertEquals('/the-prefix/suffix', $routeCollection->get('imported.en')->getPath());
+    }
+
+    public function testLocalizedImportsOfNotLocalizedRoutes()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/localized']));
+        $routeCollection = $loader->load('importer-with-locale-imports-non-localized-route.xml');
+        $routes = $routeCollection->all();
+
+        $this->assertCount(2, $routes, 'Two routes are loaded');
+        $this->assertContainsOnly('Symfony\Component\Routing\Route', $routes);
+
+        $this->assertEquals('/le-prefix/suffix', $routeCollection->get('imported.fr')->getPath());
+        $this->assertEquals('/the-prefix/suffix', $routeCollection->get('imported.en')->getPath());
     }
 
     /**
@@ -401,5 +498,25 @@ class XmlFileLoaderTest extends TestCase
 
         $route = $routeCollection->get('baz_route');
         $this->assertSame('AppBundle:Baz:view', $route->getDefault('_controller'));
+    }
+
+    public function testImportRouteWithNamePrefix()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/import_with_name_prefix']));
+        $routeCollection = $loader->load('routing.xml');
+
+        $this->assertNotNull($routeCollection->get('app_blog'));
+        $this->assertEquals('/blog', $routeCollection->get('app_blog')->getPath());
+        $this->assertNotNull($routeCollection->get('api_app_blog'));
+        $this->assertEquals('/api/blog', $routeCollection->get('api_app_blog')->getPath());
+    }
+
+    public function testImportRouteWithNoTrailingSlash()
+    {
+        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/import_with_no_trailing_slash']));
+        $routeCollection = $loader->load('routing.xml');
+
+        $this->assertEquals('/slash/', $routeCollection->get('a_app_homepage')->getPath());
+        $this->assertEquals('/no-slash', $routeCollection->get('b_app_homepage')->getPath());
     }
 }
